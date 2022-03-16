@@ -1,5 +1,5 @@
-﻿using LibHouse.Data.Transactions;
-using LibHouse.Infrastructure.Authentication.Extensions;
+﻿using LibHouse.Business.Entities.Shared;
+using LibHouse.Infrastructure.Authentication.Extensions.Common;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;

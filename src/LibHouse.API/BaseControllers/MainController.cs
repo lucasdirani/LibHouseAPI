@@ -1,9 +1,10 @@
-﻿using KissLog;
-using LibHouse.API.Extensions.Notifications;
+﻿using AutoMapper;
+using KissLog;
 using LibHouse.Business.Notifiers;
 using LibHouse.Infrastructure.Authentication.Token;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System.Linq;
 
 namespace LibHouse.API.BaseControllers
 {
@@ -14,54 +15,81 @@ namespace LibHouse.API.BaseControllers
 
         public ILoggedUser LoggedUser { get; }
         public IKLogger Logger { get; }
+        public IMapper Mapper { get; }
 
         protected MainController(
             INotifier notifier,
             ILoggedUser loggedUser,
-            IKLogger logger)
+            IKLogger logger,
+            IMapper mapper)
         {
             _notifier = notifier;
             LoggedUser = loggedUser;
             Logger = logger;
+            Mapper = mapper;
         }
 
         protected bool EndpointOperationWasSuccessful => !_notifier.HasNotification();
         protected bool EndpointOperationFailed => !EndpointOperationWasSuccessful;
 
-        protected void NotifyError(string errorTitle, string errorMessage, string errorCode) =>
-            _notifier.Handle(new Notification(errorMessage, errorCode, errorTitle));
+        protected void NotifyError(string errorTitle, string errorMessage) =>
+            _notifier.Handle(new Notification(errorMessage, errorTitle));
 
         protected ActionResult CustomResponseForGetEndpoint(object response = null)
         {
             if (response is null)
             {
-                return NotFound(_notifier.GetNotifications().ToProblemDetails(Request, HttpStatusCode.NotFound));
+                return NotFound(_notifier.GetNotifications());
             }
 
             return CustomResponse(response);
         }
 
         protected ActionResult CustomResponseForPostEndpoint(
-            object response,
+            object response = null,
             object resourceIdentifier = null,
             string resourceCreatedAt = null)
         {
             if (EndpointOperationFailed)
             {
-                return BadRequest(_notifier.GetNotifications().ToProblemDetails(Request, HttpStatusCode.BadRequest));
+                return BadRequest(_notifier.GetNotifications());
             }
 
             return CreatedAtAction(resourceCreatedAt, new { id = resourceIdentifier }, response);
         }
 
-        private ActionResult CustomResponse(object response)
+        protected ActionResult CustomResponseFor(ModelStateDictionary modelState)
+        {
+            if (!modelState.IsValid)
+            {
+                NotifyErrorsForInvalidModelState(modelState);
+            }
+
+            return CustomResponse();
+        }
+
+        private ActionResult CustomResponse(object response = null)
         {
             if (EndpointOperationWasSuccessful)
             {
                 return Ok(response);
             }
 
-            return BadRequest(_notifier.GetNotifications().ToProblemDetails(Request, HttpStatusCode.BadRequest));
+            return BadRequest(_notifier.GetNotifications());
+        }
+
+        private void NotifyErrorsForInvalidModelState(ModelStateDictionary modelState)
+        {
+            var errors = modelState.Values.SelectMany(m => m.Errors);
+
+            foreach (var error in errors)
+            {
+                var errorMessage = error.Exception == null ? error.ErrorMessage : error.Exception.Message;
+
+                var errorTitle = error.Exception.Source;
+
+                NotifyError(errorTitle, errorMessage);
+            }
         }
     }
 }

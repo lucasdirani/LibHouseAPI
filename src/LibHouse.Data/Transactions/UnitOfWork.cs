@@ -1,4 +1,5 @@
-﻿using LibHouse.Business.Entities.Users;
+﻿using LibHouse.Business.Entities.Shared;
+using LibHouse.Business.Entities.Users;
 using LibHouse.Data.Context;
 using LibHouse.Data.Repositories.Users;
 using System.Threading.Tasks;

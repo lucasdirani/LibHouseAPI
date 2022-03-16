@@ -2,7 +2,9 @@ using LibHouse.API.Configurations.Authentication;
 using LibHouse.API.Configurations.Cache;
 using LibHouse.API.Configurations.Core;
 using LibHouse.API.Configurations.Dependencies;
+using LibHouse.API.Configurations.Email;
 using LibHouse.API.Configurations.Logging;
+using LibHouse.API.Configurations.Mapping;
 using LibHouse.API.Configurations.Swagger;
 using LibHouse.API.Middlewares;
 using Microsoft.AspNetCore.Builder;
@@ -28,9 +30,17 @@ namespace LibHouse.API
         {
             services.AddApiResponseCompressionConfig();
 
-            services.ResolveGeneralDependencies();
+            services.AddEmailConfig(Configuration);
+
+            services.AddAutoMapperConfigurationForV1();
+
+            services.ResolveGeneralDependencies(Configuration);
 
             services.ResolveRepositories(Configuration);
+
+            services.ResolveValidators();
+
+            services.ResolveServices();
 
             services.AddIdentityConfiguration(Configuration);
 

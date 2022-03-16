@@ -1,9 +1,15 @@
 ﻿using LibHouse.API.Authentication;
 using LibHouse.API.Configurations.Swagger;
+using LibHouse.Business.Entities.Shared;
+using LibHouse.Business.Entities.Users;
 using LibHouse.Business.Notifiers;
+using LibHouse.Business.Services.Users;
+using LibHouse.Business.Validations.Users;
 using LibHouse.Data.Context;
+using LibHouse.Data.Repositories.Users;
 using LibHouse.Data.Transactions;
 using LibHouse.Infrastructure.Authentication.Token;
+using LibHouse.Infrastructure.Shared.Settings;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
@@ -18,8 +24,13 @@ namespace LibHouse.API.Configurations.Dependencies
 {
     public static class DependencyInjectionConfig
     {
-        public static IServiceCollection ResolveGeneralDependencies(this IServiceCollection services)
+        public static IServiceCollection ResolveGeneralDependencies(
+            this IServiceCollection services,
+            IConfiguration configuration)
         {
+            services.Configure<LibHouseWebsiteSettings>(options 
+                => configuration.GetSection("LibHouseWebsiteSettings").Bind(options));
+
             services.AddScoped<INotifier, Notifier>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -27,6 +38,20 @@ namespace LibHouse.API.Configurations.Dependencies
             services.AddScoped<ILoggedUser, AspNetLoggedUser>();
 
             services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
+
+            return services;
+        }
+
+        public static IServiceCollection ResolveValidators(this IServiceCollection services)
+        {
+            services.AddScoped<UserRegistrationValidator>();
+
+            return services;
+        }
+
+        public static IServiceCollection ResolveServices(this IServiceCollection services)
+        {
+            services.AddScoped<IUserRegistrationService, UserRegistrationService>();
 
             return services;
         }
@@ -50,6 +75,8 @@ namespace LibHouse.API.Configurations.Dependencies
             );
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            services.AddScoped<IUserRepository, UserRepository>();
 
             return services;
         }

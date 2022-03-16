@@ -2,7 +2,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace LibHouse.Data.Transactions
+namespace LibHouse.Business.Entities.Shared
 {
     public interface IUnitOfWork : IDisposable
     {

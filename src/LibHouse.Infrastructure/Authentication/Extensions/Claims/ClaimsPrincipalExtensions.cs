@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Security.Claims;
 
-namespace LibHouse.Infrastructure.Authentication.Extensions
+namespace LibHouse.Infrastructure.Authentication.Extensions.Claims
 {
     public static class ClaimsPrincipalExtensions
     {

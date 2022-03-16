@@ -4,5 +4,70 @@
         <name>LibHouse.API</name>
     </assembly>
     <members>
+        <member name="M:LibHouse.API.V1.Controllers.UsersController.RegisterUserAsync(LibHouse.API.V1.ViewModels.Users.RegisterUserViewModel)">
+            <summary>
+            Cadastra um novo usuário na plataforma, enviando um e-mail automático de confirmação.
+            </summary>
+            <param name="registerUser">Objeto que possui os dados necessários para cadastrar o usuário.</param>
+            <returns>Em caso de sucesso, retorna um objeto vazio. Em caso de erro, retorna uma lista de notificações.</returns>
+            <response code="200">O usuário foi registrado com sucesso.</response>
+            <response code="400">Os dados enviados são inválidos, o usuário já está cadastrado ou houve uma falha para registrá-lo.</response>
+            <response code="500">Erro ao processar a requisição no servidor.</response>
+        </member>
+        <member name="T:LibHouse.API.V1.ViewModels.Users.RegisterUserViewModel">
+            <summary>
+            Objeto que possui os dados necessários para o cadastro de um usuário.
+            </summary>
+        </member>
+        <member name="P:LibHouse.API.V1.ViewModels.Users.RegisterUserViewModel.Name">
+            <summary>
+            O nome do usuário cadastrado. Deve possuir no mínimo três, e no máximo quarenta caracteres.
+            </summary>
+        </member>
+        <member name="P:LibHouse.API.V1.ViewModels.Users.RegisterUserViewModel.LastName">
+            <summary>
+            O sobrenome do usuário cadastrado. Deve possuir no mínimo três, e no máximo quarenta caracteres.
+            </summary>
+        </member>
+        <member name="P:LibHouse.API.V1.ViewModels.Users.RegisterUserViewModel.BirthDate">
+            <summary>
+            A data de nascimento do usuário cadastrado.
+            </summary>
+        </member>
+        <member name="P:LibHouse.API.V1.ViewModels.Users.RegisterUserViewModel.Gender">
+            <summary>
+            O gênero do usuário cadastrado. O valor 0 representa masculino, o valor 1 representa feminino, o valor 2 representa outros, e o valor 3 representa não declarado.
+            </summary>
+        </member>
+        <member name="P:LibHouse.API.V1.ViewModels.Users.RegisterUserViewModel.Phone">
+            <summary>
+            O número de telefone do usuário cadastrado. Deve possuir no mínimo dez, e no máximo onze caracteres.
+            </summary>
+        </member>
+        <member name="P:LibHouse.API.V1.ViewModels.Users.RegisterUserViewModel.Email">
+            <summary>
+            O endereço de e-mail do usuário cadastrado. Deve possuir no mínimo cinco, e no máximo sessenta caracteres.
+            </summary>
+        </member>
+        <member name="P:LibHouse.API.V1.ViewModels.Users.RegisterUserViewModel.Cpf">
+            <summary>
+            O número de cpf do usuário cadastrado.
+            </summary>
+        </member>
+        <member name="P:LibHouse.API.V1.ViewModels.Users.RegisterUserViewModel.UserType">
+            <summary>
+            O tipo do usuário cadastrado. O valor 0 representa morador, enquanto o valor 1 representa proprietário.
+            </summary>
+        </member>
+        <member name="P:LibHouse.API.V1.ViewModels.Users.RegisterUserViewModel.Password">
+            <summary>
+            A senha do usuário cadastrado. A senha deve ter pelo menos uma letra maiúscula, uma letra minúscula, um número e um caracter especial. Mínimo de dez, e máximo de trinta caracteres.
+            </summary>
+        </member>
+        <member name="P:LibHouse.API.V1.ViewModels.Users.RegisterUserViewModel.ConfirmPassword">
+            <summary>
+            A confirmação da senha do usuário cadastrado.
+            </summary>
+        </member>
     </members>
 </doc>

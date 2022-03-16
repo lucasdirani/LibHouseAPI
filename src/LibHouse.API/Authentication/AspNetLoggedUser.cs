@@ -1,4 +1,4 @@
-﻿using LibHouse.Infrastructure.Authentication.Extensions;
+﻿using LibHouse.Infrastructure.Authentication.Extensions.Claims;
 using LibHouse.Infrastructure.Authentication.Token;
 using Microsoft.AspNetCore.Http;
 using System;

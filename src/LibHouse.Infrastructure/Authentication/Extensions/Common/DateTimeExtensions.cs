@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LibHouse.Infrastructure.Authentication.Extensions
+namespace LibHouse.Infrastructure.Authentication.Extensions.Common
 {
     public static class DateTimeExtensions
     {

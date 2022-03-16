@@ -17,7 +17,11 @@ namespace LibHouse.API.Configurations.Authentication
             services.AddDbContext<AuthenticationContext>(options => options.UseSqlServer(connectionString));
 
             services
-              .AddIdentity<IdentityUser, IdentityRole>()
+              .AddIdentity<IdentityUser, IdentityRole>(opt =>
+              {
+                  opt.User.RequireUniqueEmail = true;
+                  opt.SignIn.RequireConfirmedEmail = true;
+              })
               .AddEntityFrameworkStores<AuthenticationContext>()
               .AddDefaultTokenProviders();
 

@@ -14,6 +14,16 @@ namespace LibHouse.Data.Repositories.Users
 
         }
 
+        public async Task<bool> CheckIfUserCpfIsNotRegistered(Cpf cpf)
+        {
+            return !await _dbSet.AnyAsync(u => u.CPF.Value == cpf.Value);
+        }
+
+        public async Task<bool> CheckIfUserEmailIsNotRegistered(string email)
+        {
+            return !await _dbSet.AnyAsync(u => u.Email == email);
+        }
+
         public async Task<User> GetUserByEmailAsync(string email)
         {
             return await _dbSet.FirstOrDefaultAsync(u => u.Email == email);

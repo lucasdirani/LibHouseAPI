@@ -18,13 +18,13 @@ namespace LibHouse.Business.Services.Shared
         {
             foreach (var error in validationResult.Errors)
             {
-                Notify(error.ErrorCode, error.ErrorMessage, error.PropertyName);
+                Notify(error.PropertyName, error.ErrorMessage);
             }
         }
 
-        protected void Notify(string code, string message, string title)
+        protected void Notify(string title, string message)
         {
-            _notifier.Handle(new Notification(message, code, title));
+            _notifier.Handle(new Notification(message, title));
         }
 
         protected bool ExecuteValidation<TV, TE>(TV validator, TE entity) 

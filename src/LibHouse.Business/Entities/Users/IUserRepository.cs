@@ -6,5 +6,7 @@ namespace LibHouse.Business.Entities.Users
     public interface IUserRepository : IEntityRepository<User>
     {
         Task<User> GetUserByEmailAsync(string email);
+        Task<bool> CheckIfUserCpfIsNotRegistered(Cpf cpf);
+        Task<bool> CheckIfUserEmailIsNotRegistered(string email);
     }
 }

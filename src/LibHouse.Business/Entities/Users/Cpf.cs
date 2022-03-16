@@ -157,7 +157,7 @@ namespace LibHouse.Business.Entities.Users
         }
 
         public static implicit operator Cpf(string value)
-            => new Cpf(value);
+            => new(value);
 
         public override string ToString() => Value;
     }

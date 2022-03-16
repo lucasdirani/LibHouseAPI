@@ -1,4 +1,5 @@
-﻿using LibHouse.Infrastructure.Authentication.Token;
+﻿using LibHouse.Infrastructure.Authentication.Register;
+using LibHouse.Infrastructure.Authentication.Token;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -38,6 +39,8 @@ namespace LibHouse.API.Configurations.Authentication
             });
 
             services.AddScoped<ITokenGenerator, JwtTokenGenerator>();
+
+            services.AddScoped<IUserSignUp, IdentityUserSignUp>();
 
             return services;
         }
