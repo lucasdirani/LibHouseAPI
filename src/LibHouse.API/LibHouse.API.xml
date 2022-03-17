@@ -14,6 +14,36 @@
             <response code="400">Os dados enviados são inválidos, o usuário já está cadastrado ou houve uma falha para registrá-lo.</response>
             <response code="500">Erro ao processar a requisição no servidor.</response>
         </member>
+        <member name="M:LibHouse.API.V1.Controllers.UsersController.ConfirmUserRegistrationAsync(LibHouse.API.V1.ViewModels.Users.ConfirmUserRegistrationViewModel)">
+            <summary>
+            Confirma o cadastro de um novo usuário na plataforma.
+            </summary>
+            <param name="confirmUserRegistration">Objeto que possui os dados necessários para confirmar o cadastro do usuário.</param>
+            <returns>Em caso de sucesso, retorna um objeto vazio. Em caso de erro, retorna uma lista de notificações.</returns>
+            <response code="204">O cadastro do usuário foi confirmado com sucesso.</response>
+            <response code="400">Os dados enviados são inválidos ou o token de confirmação expirou.</response>
+            <response code="500">Erro ao processar a requisição no servidor.</response>
+        </member>
+        <member name="T:LibHouse.API.V1.ViewModels.Users.ConfirmUserRegistrationViewModel">
+            <summary>
+            Objeto que possui os dados necessários para realizar a confirmação do registro de um usuário.
+            </summary>
+        </member>
+        <member name="P:LibHouse.API.V1.ViewModels.Users.ConfirmUserRegistrationViewModel.ConfirmationToken">
+            <summary>
+            O token de confirmação recebido no e-mail do usuário.
+            </summary>
+        </member>
+        <member name="P:LibHouse.API.V1.ViewModels.Users.ConfirmUserRegistrationViewModel.UserEmail">
+            <summary>
+            O endereço de e-mail utilizado no registro do usuário.
+            </summary>
+        </member>
+        <member name="P:LibHouse.API.V1.ViewModels.Users.ConfirmUserRegistrationViewModel.UserId">
+            <summary>
+            O identificador único do usuário retornado junto com o token de confirmação.
+            </summary>
+        </member>
         <member name="T:LibHouse.API.V1.ViewModels.Users.RegisterUserViewModel">
             <summary>
             Objeto que possui os dados necessários para o cadastro de um usuário.

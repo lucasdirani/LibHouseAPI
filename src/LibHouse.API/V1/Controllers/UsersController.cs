@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using KissLog;
+using LibHouse.API.Attributes.Authorization;
 using LibHouse.API.BaseControllers;
 using LibHouse.API.Extensions.ModelState;
 using LibHouse.API.V1.ViewModels.Users;
@@ -8,7 +9,6 @@ using LibHouse.Business.Monads;
 using LibHouse.Business.Notifiers;
 using LibHouse.Infrastructure.Authentication.Register;
 using LibHouse.Infrastructure.Authentication.Token;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -81,6 +81,45 @@ namespace LibHouse.API.V1.Controllers
             }
 
             return Ok();
+        }
+
+        /// <summary>
+        /// Confirma o cadastro de um novo usuário na plataforma.
+        /// </summary>
+        /// <param name="confirmUserRegistration">Objeto que possui os dados necessários para confirmar o cadastro do usuário.</param>
+        /// <returns>Em caso de sucesso, retorna um objeto vazio. Em caso de erro, retorna uma lista de notificações.</returns>
+        /// <response code="204">O cadastro do usuário foi confirmado com sucesso.</response>
+        /// <response code="400">Os dados enviados são inválidos ou o token de confirmação expirou.</response>
+        /// <response code="500">Erro ao processar a requisição no servidor.</response>
+        [AllowAnonymous]
+        [HttpPatch("confirm-registration", Name = "Confirm User Registration")]
+        public async Task<ActionResult> ConfirmUserRegistrationAsync(
+            [FromQuery] ConfirmUserRegistrationViewModel confirmUserRegistration)
+        {
+            if (ModelState.NotValid())
+            {
+                return CustomResponseFor(ModelState);
+            }
+
+            Result userConfirmed = await _userRegistrationService.ConfirmUserRegistrationAsync(confirmUserRegistration.UserId);
+
+            if (userConfirmed.Failure)
+            {
+                return CustomResponseForPatchEndpoint(userConfirmed);
+            }
+
+            SignUpConfirmationToken confirmationToken = new(confirmUserRegistration.ConfirmationToken, isEncoded: true);
+
+            Result userConfirmationAccepted = await _userSignUp.AcceptUserConfirmationTokenAsync(confirmationToken, confirmUserRegistration.UserEmail);
+
+            if (userConfirmationAccepted.Failure)
+            {
+                NotifyError("Aceitar confirmação do usuário", userConfirmationAccepted.Error);
+
+                return CustomResponseForPatchEndpoint(userConfirmationAccepted);
+            }
+
+            return CustomResponseForPatchEndpoint(userConfirmationAccepted);
         }
     }
 }

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 
 namespace LibHouse.Infrastructure.Authentication.Extensions.Claims
@@ -8,7 +10,7 @@ namespace LibHouse.Infrastructure.Authentication.Extensions.Claims
         public static string GetUserId(this ClaimsPrincipal claimsPrincipal)
         {
             if (claimsPrincipal is null)
-                throw new ArgumentException($"User claims were not found: {nameof(GetUserId)}");
+                throw new ArgumentException($"Claims do usuário não encontradas: {nameof(GetUserId)}");
 
             var claim = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier);
 
@@ -18,7 +20,7 @@ namespace LibHouse.Infrastructure.Authentication.Extensions.Claims
         public static string GetUserEmail(this ClaimsPrincipal claimsPrincipal)
         {
             if (claimsPrincipal is null)
-                throw new ArgumentException($"User claims were not found: {nameof(GetUserEmail)}");
+                throw new ArgumentException($"Claims do usuário não encontradas: {nameof(GetUserEmail)}");
 
             var claim = claimsPrincipal.FindFirst(ClaimTypes.Email);
 
@@ -28,11 +30,25 @@ namespace LibHouse.Infrastructure.Authentication.Extensions.Claims
         public static string GetUserName(this ClaimsPrincipal claimsPrincipal)
         {
             if (claimsPrincipal is null)
-                throw new ArgumentException($"User claims were not found: {nameof(GetUserName)}");
+                throw new ArgumentException($"Claims do usuário não encontradas: {nameof(GetUserName)}");
 
             var claim = claimsPrincipal.FindFirst(ClaimTypes.Name);
 
             return claim?.Value;
+        }
+
+        public static bool CheckIfUserHasOneOfTheseRoles(
+            this ClaimsPrincipal claimsPrincipal, 
+            IList<string> roles)
+        {
+            if (claimsPrincipal is null)
+                throw new ArgumentException($"Claims do usuário não encontradas: {nameof(CheckIfUserHasOneOfTheseRoles)}");
+
+            var claims = claimsPrincipal.FindAll("role");
+
+            if (!claims.Any()) return false;
+
+            return claims.Select(c => c.Value).Any(r => roles.Contains(r));
         }
     }
 }

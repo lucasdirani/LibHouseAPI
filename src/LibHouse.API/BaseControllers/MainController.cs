@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using KissLog;
+using LibHouse.Business.Monads;
 using LibHouse.Business.Notifiers;
 using LibHouse.Infrastructure.Authentication.Token;
 using Microsoft.AspNetCore.Mvc;
@@ -56,6 +57,16 @@ namespace LibHouse.API.BaseControllers
             }
 
             return CreatedAtAction(resourceCreatedAt, new { id = resourceIdentifier }, response);
+        }
+
+        protected ActionResult CustomResponseForPatchEndpoint(Result result)
+        {
+            if (EndpointOperationWasSuccessful && result.IsSuccess)
+            {
+                return NoContent();
+            }
+
+            return BadRequest(_notifier.GetNotifications());
         }
 
         protected ActionResult CustomResponseFor(ModelStateDictionary modelState)

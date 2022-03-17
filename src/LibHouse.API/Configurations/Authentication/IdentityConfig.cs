@@ -1,8 +1,10 @@
 ﻿using LibHouse.Infrastructure.Authentication.Context;
+using LibHouse.Infrastructure.Authentication.Token.Providers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace LibHouse.API.Configurations.Authentication
 {
@@ -21,9 +23,15 @@ namespace LibHouse.API.Configurations.Authentication
               {
                   opt.User.RequireUniqueEmail = true;
                   opt.SignIn.RequireConfirmedEmail = true;
+                  opt.Tokens.EmailConfirmationTokenProvider = "EmailConfirmation";
               })
               .AddEntityFrameworkStores<AuthenticationContext>()
-              .AddDefaultTokenProviders();
+              .AddDefaultTokenProviders()
+              .AddTokenProvider<EmailConfirmationTokenProvider<IdentityUser>>("EmailConfirmation");
+
+            services.Configure<DataProtectionTokenProviderOptions>(opt => opt.TokenLifespan = TimeSpan.FromHours(2));
+
+            services.Configure<EmailConfirmationTokenProviderOptions>(opt => opt.TokenLifespan = TimeSpan.FromDays(2));
 
             return services;
         }
