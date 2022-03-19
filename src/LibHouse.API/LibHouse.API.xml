@@ -24,6 +24,16 @@
             <response code="400">Os dados enviados são inválidos ou o token de confirmação expirou.</response>
             <response code="500">Erro ao processar a requisição no servidor.</response>
         </member>
+        <member name="M:LibHouse.API.V1.Controllers.UsersController.LoginUserAsync(LibHouse.API.V1.ViewModels.Users.LoginUserViewModel)">
+            <summary>
+            Realiza o login de um usuário na plataforma, gerando um token de acesso.
+            </summary>
+            <param name="loginUser">Objeto que possui os dados necessários para confirmar o login do usuário.</param>
+            <returns>Em caso de sucesso, retorna um objeto com os dados do usuário e do token. Em caso de erro, retorna uma lista de notificações.</returns>
+            <response code="200">O login do usuário foi confirmado com sucesso.</response>
+            <response code="400">Os dados enviados são inválidos ou houve uma falha na autenticação do usuário.</response>
+            <response code="500">Erro ao processar a requisição no servidor.</response>
+        </member>
         <member name="T:LibHouse.API.V1.ViewModels.Users.ConfirmUserRegistrationViewModel">
             <summary>
             Objeto que possui os dados necessários para realizar a confirmação do registro de um usuário.
@@ -42,6 +52,21 @@
         <member name="P:LibHouse.API.V1.ViewModels.Users.ConfirmUserRegistrationViewModel.UserId">
             <summary>
             O identificador único do usuário retornado junto com o token de confirmação.
+            </summary>
+        </member>
+        <member name="T:LibHouse.API.V1.ViewModels.Users.LoginUserViewModel">
+            <summary>
+            Objeto que possui os dados necessários para o login de um usuário.
+            </summary>
+        </member>
+        <member name="P:LibHouse.API.V1.ViewModels.Users.LoginUserViewModel.Email">
+            <summary>
+            O endereço de e-mail do usuário cadastrado.
+            </summary>
+        </member>
+        <member name="P:LibHouse.API.V1.ViewModels.Users.LoginUserViewModel.Password">
+            <summary>
+            A senha do usuário cadastrado. 
             </summary>
         </member>
         <member name="T:LibHouse.API.V1.ViewModels.Users.RegisterUserViewModel">

@@ -1,4 +1,4 @@
-﻿namespace LibHouse.Infrastructure.Authentication.Token
+﻿namespace LibHouse.Infrastructure.Authentication.Token.Settings
 {
     public class TokenSettings
     {

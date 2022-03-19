@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Web;
 
-namespace LibHouse.Infrastructure.Authentication.Token
+namespace LibHouse.Infrastructure.Authentication.Token.Models
 {
     public class SignUpConfirmationToken
     {

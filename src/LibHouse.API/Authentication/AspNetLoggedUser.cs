@@ -1,5 +1,5 @@
 ﻿using LibHouse.Infrastructure.Authentication.Extensions.Claims;
-using LibHouse.Infrastructure.Authentication.Token;
+using LibHouse.Infrastructure.Authentication.Token.Login;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;

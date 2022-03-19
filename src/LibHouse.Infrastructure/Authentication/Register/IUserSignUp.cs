@@ -1,6 +1,6 @@
 ﻿using LibHouse.Business.Entities.Users;
 using LibHouse.Business.Monads;
-using LibHouse.Infrastructure.Authentication.Token;
+using LibHouse.Infrastructure.Authentication.Token.Models;
 using System.Threading.Tasks;
 
 namespace LibHouse.Infrastructure.Authentication.Register

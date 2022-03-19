@@ -1,17 +1,16 @@
-﻿using LibHouse.Business.Entities.Users;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace LibHouse.Infrastructure.Authentication.Token
+namespace LibHouse.Infrastructure.Authentication.Token.Models
 {
     public class UserToken
     {
-        public User User { get; }
+        public AuthenticatedUser User { get; }
         public string AccessToken { get; }
         public double ExpiresIn { get; }
         public IEnumerable<UserClaim> Claims { get; }
 
         public UserToken(
-            User user, 
+            AuthenticatedUser user, 
             string accessToken, 
             double expiresIn, 
             IEnumerable<UserClaim> claims)

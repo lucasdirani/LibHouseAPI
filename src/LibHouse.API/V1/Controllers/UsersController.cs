@@ -8,8 +8,11 @@ using LibHouse.Business.Entities.Users;
 using LibHouse.Business.Monads;
 using LibHouse.Business.Notifiers;
 using LibHouse.Infrastructure.Authentication.Register;
-using LibHouse.Infrastructure.Authentication.Token;
+using LibHouse.Infrastructure.Authentication.Token.Generators;
+using LibHouse.Infrastructure.Authentication.Token.Login;
+using LibHouse.Infrastructure.Authentication.Token.Models;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 
 namespace LibHouse.API.V1.Controllers
@@ -18,6 +21,8 @@ namespace LibHouse.API.V1.Controllers
     [Route("api/v{version:apiVersion}/users")]
     public class UsersController : MainController
     {
+        private readonly IUserSignIn _userSignIn;
+        private readonly ITokenGenerator _tokenGenerator;
         private readonly IUserSignUp _userSignUp;
         private readonly IUserRegistrationService _userRegistrationService;
 
@@ -26,10 +31,14 @@ namespace LibHouse.API.V1.Controllers
             ILoggedUser loggedUser, 
             IKLogger logger,
             IMapper mapper,
+            ITokenGenerator tokenGenerator,
+            IUserSignIn userSignIn,
             IUserSignUp userSignUp,
             IUserRegistrationService userRegistrationService) 
             : base(notifier, loggedUser, logger, mapper)
         {
+            _tokenGenerator = tokenGenerator;
+            _userSignIn = userSignIn;
             _userSignUp = userSignUp;
             _userRegistrationService = userRegistrationService;
         }
@@ -120,6 +129,41 @@ namespace LibHouse.API.V1.Controllers
             }
 
             return CustomResponseForPatchEndpoint(userConfirmationAccepted);
+        }
+
+        /// <summary>
+        /// Realiza o login de um usuário na plataforma, gerando um token de acesso.
+        /// </summary>
+        /// <param name="loginUser">Objeto que possui os dados necessários para confirmar o login do usuário.</param>
+        /// <returns>Em caso de sucesso, retorna um objeto com os dados do usuário e do token. Em caso de erro, retorna uma lista de notificações.</returns>
+        /// <response code="200">O login do usuário foi confirmado com sucesso.</response>
+        /// <response code="400">Os dados enviados são inválidos ou houve uma falha na autenticação do usuário.</response>
+        /// <response code="500">Erro ao processar a requisição no servidor.</response>
+        [AllowAnonymous]
+        [HttpPost("login", Name = "User Login")]
+        public async Task<ActionResult<UserToken>> LoginUserAsync(LoginUserViewModel loginUser)
+        {
+            if (ModelState.NotValid())
+            {
+                return CustomResponseFor(ModelState);
+            }
+
+            Result userSignIn = await _userSignIn.SignInUserAsync(loginUser.Email, loginUser.Password);
+
+            if (userSignIn.Failure)
+            {
+                NotifyError("Falha na autenticação do usuário", userSignIn.Error);
+
+                Logger.Log(LogLevel.Warning, userSignIn.Error);
+
+                return CustomResponseForPostEndpoint();
+            }
+
+            UserToken userToken = await _tokenGenerator.GenerateUserTokenAsync(loginUser.Email);
+
+            Logger.Log(LogLevel.Information, $"Usuário {loginUser.Email} realizou login com sucesso: {DateTime.UtcNow}");
+
+            return Ok(userToken);
         }
     }
 }

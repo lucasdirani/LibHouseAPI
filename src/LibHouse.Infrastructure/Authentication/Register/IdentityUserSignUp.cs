@@ -4,7 +4,7 @@ using LibHouse.Infrastructure.Authentication.Extensions.Identity;
 using LibHouse.Infrastructure.Authentication.Extensions.Users;
 using LibHouse.Infrastructure.Authentication.Register.Messages;
 using LibHouse.Infrastructure.Authentication.Roles;
-using LibHouse.Infrastructure.Authentication.Token;
+using LibHouse.Infrastructure.Authentication.Token.Models;
 using LibHouse.Infrastructure.Email;
 using LibHouse.Infrastructure.Shared.Settings;
 using Microsoft.AspNetCore.Identity;

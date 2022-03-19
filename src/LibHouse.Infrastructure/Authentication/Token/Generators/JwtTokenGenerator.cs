@@ -1,5 +1,9 @@
 ﻿using LibHouse.Business.Entities.Shared;
+using LibHouse.Business.Projections.Users;
 using LibHouse.Infrastructure.Authentication.Extensions.Common;
+using LibHouse.Infrastructure.Authentication.Extensions.Users;
+using LibHouse.Infrastructure.Authentication.Token.Models;
+using LibHouse.Infrastructure.Authentication.Token.Settings;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -10,7 +14,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LibHouse.Infrastructure.Authentication.Token
+namespace LibHouse.Infrastructure.Authentication.Token.Generators
 {
     public class JwtTokenGenerator : ITokenGenerator
     {
@@ -38,7 +42,8 @@ namespace LibHouse.Infrastructure.Authentication.Token
 
             var tokenHandler = new JwtSecurityTokenHandler();
 
-            var signingCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature);
+            var signingCredentials = 
+                new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature);
 
             SecurityToken token = tokenHandler.CreateToken(new SecurityTokenDescriptor
             {
@@ -49,8 +54,11 @@ namespace LibHouse.Infrastructure.Authentication.Token
                 SigningCredentials = signingCredentials,
             });
 
+            ConsolidatedUser consolidatedUser = 
+                await _unitOfWork.UserRepository.GetConsolidatedUserByEmailAsync(userEmail);
+
             return new UserToken(
-                user: await _unitOfWork.UserRepository.GetUserByEmailAsync(userEmail),
+                user: consolidatedUser.AsAuthenticatedUser(),
                 accessToken: tokenHandler.WriteToken(token),
                 expiresIn: TimeSpan.FromHours(_tokenSettings.ExpiresInHours).TotalSeconds,
                 claims: identityClaims.Claims.Select(c => new UserClaim(c.Type, c.Value))

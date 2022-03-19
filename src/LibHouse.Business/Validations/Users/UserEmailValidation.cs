@@ -8,7 +8,7 @@ namespace LibHouse.Business.Validations.Users
         public UserEmailValidation(IUserRepository userRepository)
         {
             RuleFor(u => u.Email).MustAsync(
-                async (email, cancellationToken) => await userRepository.CheckIfUserEmailIsNotRegistered(email)
+                async (email, cancellationToken) => await userRepository.CheckIfUserEmailIsNotRegisteredAsync(email)
             ).WithMessage("O endereço de e-mail já foi registrado.");
         }
     }

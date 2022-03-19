@@ -1,5 +1,5 @@
 ﻿using LibHouse.Business.Entities.Users;
-using LibHouse.Infrastructure.Authentication.Token;
+using LibHouse.Infrastructure.Authentication.Token.Models;
 
 namespace LibHouse.Infrastructure.Authentication.Register.Messages
 {

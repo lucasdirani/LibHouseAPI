@@ -8,7 +8,7 @@ namespace LibHouse.Business.Validations.Users
         public UserCpfValidation(IUserRepository userRepository)
         {
             RuleFor(u => u.CPF).MustAsync(
-                async (cpf, cancellationToken) => await userRepository.CheckIfUserCpfIsNotRegistered(cpf)
+                async (cpf, cancellationToken) => await userRepository.CheckIfUserCpfIsNotRegisteredAsync(cpf)
             ).WithMessage("O CPF já foi registrado.");
         }
     }
