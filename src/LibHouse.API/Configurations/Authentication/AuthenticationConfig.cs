@@ -20,6 +20,18 @@ namespace LibHouse.API.Configurations.Authentication
 
             var tokenSettings = tokenSettingsSection.Get<TokenSettings>();
             var key = Encoding.ASCII.GetBytes(tokenSettings.Secret);
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(key),
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidAudience = tokenSettings.ValidIn,
+                ValidIssuer = tokenSettings.Issuer,
+            };
+
+            services.AddSingleton(tokenValidationParameters);
 
             services.AddAuthentication(x => {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -28,15 +40,7 @@ namespace LibHouse.API.Configurations.Authentication
             {
                 x.RequireHttpsMetadata = true;
                 x.SaveToken = true;
-                x.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidAudience = tokenSettings.ValidIn,
-                    ValidIssuer = tokenSettings.Issuer,
-                };
+                x.TokenValidationParameters = tokenValidationParameters;
             });
 
             services.AddScoped<ITokenGenerator, JwtTokenGenerator>();

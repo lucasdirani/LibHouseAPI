@@ -64,6 +64,13 @@ namespace LibHouse.Data.Repositories.Shared
             return await _dbSet.FindAsync(id);
         }
 
+        public async Task<Projection> GetProjectionAsync<Projection>(
+            Expression<Func<T, bool>> expression, 
+            Expression<Func<T, Projection>> projection)
+        {
+            return await _dbSet.Where(expression).Select(projection).FirstOrDefaultAsync();
+        }
+
         public void Remove(T entity)
         {
             _dbSet.Remove(entity);

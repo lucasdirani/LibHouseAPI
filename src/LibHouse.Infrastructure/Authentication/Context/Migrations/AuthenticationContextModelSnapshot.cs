@@ -19,6 +19,53 @@ namespace LibHouse.Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.0");
 
+            modelBuilder.Entity("LibHouse.Infrastructure.Authentication.Token.Models.RefreshToken", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<DateTime>("ExpiresIn")
+                        .HasColumnType("datetime");
+
+                    b.Property<bool>("IsRevoked")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValueSql("0");
+
+                    b.Property<bool>("IsUsed")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValueSql("0");
+
+                    b.Property<string>("JwtId")
+                        .IsRequired()
+                        .HasColumnType("varchar(max)");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("char(71)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Token")
+                        .IsUnique()
+                        .HasDatabaseName("idx_refresh_token");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RefreshTokens");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -48,22 +95,22 @@ namespace LibHouse.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "3af39a61-a179-4072-9bc1-d792fc3e6bf3",
-                            ConcurrencyStamp = "7aaf5932-3199-43cc-9c71-e165827c1308",
+                            Id = "de56e9d9-041f-46a9-9aa4-dbfa7ff03120",
+                            ConcurrencyStamp = "aed8c709-bb64-43b8-8291-3255599ffb5b",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = "acc880ff-e87e-467b-9e62-d8df310dd639",
-                            ConcurrencyStamp = "f0edea99-2ebd-403d-9474-86854f0e6398",
+                            Id = "5eea6e8f-63a9-4388-b444-55df383fc0f0",
+                            ConcurrencyStamp = "f55b5e59-9bd3-4261-b34e-7ea9c2da1206",
                             Name = "Resident",
                             NormalizedName = "RESIDENT"
                         },
                         new
                         {
-                            Id = "44cb36e8-5762-4f44-bba8-4ba95559f663",
-                            ConcurrencyStamp = "a8857822-ed92-471f-bc76-b1c1f9d736e0",
+                            Id = "b95cfeac-2dbc-4c73-b84c-57ec1ac693ad",
+                            ConcurrencyStamp = "da06ee47-133b-4c29-acce-79a8473177ee",
                             Name = "Owner",
                             NormalizedName = "OWNER"
                         });
@@ -236,6 +283,17 @@ namespace LibHouse.Infrastructure.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("LibHouse.Infrastructure.Authentication.Token.Models.RefreshToken", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

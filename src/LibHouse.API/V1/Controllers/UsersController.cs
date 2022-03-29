@@ -165,5 +165,19 @@ namespace LibHouse.API.V1.Controllers
 
             return Ok(userToken);
         }
+
+        [Authorize("User")]
+        [HttpPost("refresh-token", Name = "Refresh Token")]
+        public async Task<ActionResult> RefreshTokenAsync(UserRefreshTokenViewModel userRefreshToken)
+        {
+            if (ModelState.NotValid())
+            {
+                return CustomResponseFor(ModelState);
+            }
+
+            await Task.Delay(200);
+
+            return Ok(userRefreshToken);
+        }
     }
 }

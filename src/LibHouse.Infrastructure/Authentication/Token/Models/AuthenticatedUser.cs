@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LibHouse.Business.Entities.Users;
+using System;
 
 namespace LibHouse.Infrastructure.Authentication.Token.Models
 {
@@ -13,18 +14,19 @@ namespace LibHouse.Infrastructure.Authentication.Token.Models
 
         public AuthenticatedUser(
             Guid id,
-            string fullName, 
+            string firstName,
+            string lastName,
             DateTime birthDate,
-            string gender,
+            Gender gender,
             string email, 
-            string userType)
+            UserType userType)
         {
             Id = id;
-            FullName = fullName;
+            FullName = string.Concat(firstName, " ", lastName);
             BirthDate = birthDate;
-            Gender = gender;
+            Gender = gender.ToString();
             Email = email;
-            UserType = userType;
+            UserType = userType.ToString();
         }
 
         public override string ToString()

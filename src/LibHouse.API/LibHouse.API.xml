@@ -124,5 +124,10 @@
             A confirmação da senha do usuário cadastrado.
             </summary>
         </member>
+        <member name="T:LibHouse.API.V1.ViewModels.Users.UserRefreshTokenViewModel">
+            <summary>
+            Objeto que possui os dados necessários para obter um novo token de acesso
+            </summary>
+        </member>
     </members>
 </doc>

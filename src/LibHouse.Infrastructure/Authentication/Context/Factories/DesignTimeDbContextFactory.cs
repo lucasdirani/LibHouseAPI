@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 using System.IO;
 
-namespace LibHouse.Infrastructure.Authentication.Context
+namespace LibHouse.Infrastructure.Authentication.Context.Factories
 {
     public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<AuthenticationContext>
     {

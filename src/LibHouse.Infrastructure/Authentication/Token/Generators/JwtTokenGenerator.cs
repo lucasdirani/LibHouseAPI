@@ -1,7 +1,6 @@
-﻿using LibHouse.Business.Entities.Shared;
-using LibHouse.Business.Projections.Users;
+﻿using LibHouse.Business.Entities.Users;
+using LibHouse.Infrastructure.Authentication.Context;
 using LibHouse.Infrastructure.Authentication.Extensions.Common;
-using LibHouse.Infrastructure.Authentication.Extensions.Users;
 using LibHouse.Infrastructure.Authentication.Token.Models;
 using LibHouse.Infrastructure.Authentication.Token.Settings;
 using Microsoft.AspNetCore.Identity;
@@ -19,16 +18,19 @@ namespace LibHouse.Infrastructure.Authentication.Token.Generators
     public class JwtTokenGenerator : ITokenGenerator
     {
         private readonly UserManager<IdentityUser> _userManager;
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly AuthenticationContext _authenticationContext;
+        private readonly IUserRepository _userRepository;
         private readonly TokenSettings _tokenSettings;
 
         public JwtTokenGenerator(
             UserManager<IdentityUser> userManager,
-            IUnitOfWork unitOfWork, 
+            AuthenticationContext authenticationContext,
+            IUserRepository userRepository, 
             IOptions<TokenSettings> tokenSettings)
         {
             _userManager = userManager;
-            _unitOfWork = unitOfWork;
+            _authenticationContext = authenticationContext;
+            _userRepository = userRepository;
             _tokenSettings = tokenSettings.Value;
         }
 
@@ -38,31 +40,60 @@ namespace LibHouse.Infrastructure.Authentication.Token.Generators
 
             ClaimsIdentity identityClaims = await GenerateIdentityClaimsAsync(user);
 
-            byte[] key = Encoding.ASCII.GetBytes(_tokenSettings.Secret);
+            (SecurityToken securityToken, string accessToken) = GenerateAccessToken(identityClaims);
 
+            string refreshToken = await GenerateAndStoreRefreshTokenAsync(user, securityToken.Id);
+
+            return new UserToken(
+                user: await GetAuthenticatedUserDataAsync(userEmail),
+                accessToken: accessToken,
+                expiresIn: TimeSpan.FromSeconds(_tokenSettings.ExpiresInSeconds).TotalSeconds,
+                refreshToken: refreshToken,
+                claims: identityClaims.Claims.Select(c => new UserClaim(c.Type, c.Value))
+            );
+        }
+
+        private async Task<AuthenticatedUser> GetAuthenticatedUserDataAsync(string userEmail)
+        {
+            return await _userRepository.GetProjectionAsync(
+                u => u.Email == userEmail, 
+                u => new AuthenticatedUser(u.Id, u.Name, u.LastName, u.BirthDate, u.Gender, u.Email, u.UserType)
+            );
+        }
+
+        private async Task<string> GenerateAndStoreRefreshTokenAsync(IdentityUser user, string accessTokenId)
+        {
+            IRefreshTokenGenerator refreshTokenGenerator = new JwtRefreshTokenGenerator(user);
+
+            RefreshToken refreshToken = refreshTokenGenerator.GenerateRefreshToken(accessTokenId);
+
+            await _authenticationContext.RefreshTokens.AddAsync(refreshToken);
+
+            await _authenticationContext.SaveChangesAsync();
+
+            return refreshToken.Token;
+        }
+
+        private (SecurityToken securityToken, string accessToken) GenerateAccessToken(ClaimsIdentity identityClaims)
+        {
             var tokenHandler = new JwtSecurityTokenHandler();
 
-            var signingCredentials = 
-                new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature);
+            byte[] key = Encoding.ASCII.GetBytes(_tokenSettings.Secret);
+
+            var symmetricKey = new SymmetricSecurityKey(key);
+
+            var signingCredentials = new SigningCredentials(symmetricKey, SecurityAlgorithms.HmacSha256Signature);
 
             SecurityToken token = tokenHandler.CreateToken(new SecurityTokenDescriptor
             {
                 Issuer = _tokenSettings.Issuer,
                 Audience = _tokenSettings.ValidIn,
                 Subject = identityClaims,
-                Expires = DateTime.UtcNow.AddHours(_tokenSettings.ExpiresInHours),
+                Expires = DateTime.UtcNow.AddSeconds(_tokenSettings.ExpiresInSeconds),
                 SigningCredentials = signingCredentials,
             });
 
-            ConsolidatedUser consolidatedUser = 
-                await _unitOfWork.UserRepository.GetConsolidatedUserByEmailAsync(userEmail);
-
-            return new UserToken(
-                user: consolidatedUser.AsAuthenticatedUser(),
-                accessToken: tokenHandler.WriteToken(token),
-                expiresIn: TimeSpan.FromHours(_tokenSettings.ExpiresInHours).TotalSeconds,
-                claims: identityClaims.Claims.Select(c => new UserClaim(c.Type, c.Value))
-            );
+            return (token, tokenHandler.WriteToken(token));
         }
 
         private async Task<ClaimsIdentity> GenerateIdentityClaimsAsync(IdentityUser identityUser)
