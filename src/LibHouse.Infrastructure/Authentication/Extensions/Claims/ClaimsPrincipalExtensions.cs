@@ -44,7 +44,7 @@ namespace LibHouse.Infrastructure.Authentication.Extensions.Claims
             if (claimsPrincipal is null)
                 throw new ArgumentException($"Claims do usuário não encontradas: {nameof(CheckIfUserHasOneOfTheseRoles)}");
 
-            var claims = claimsPrincipal.FindAll("role");
+            var claims = claimsPrincipal.FindAll(ClaimTypes.Role);
 
             if (!claims.Any()) return false;
 

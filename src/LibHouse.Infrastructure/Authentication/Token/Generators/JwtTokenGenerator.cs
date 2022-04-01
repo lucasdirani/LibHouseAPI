@@ -49,7 +49,7 @@ namespace LibHouse.Infrastructure.Authentication.Token.Generators
                 accessToken: accessToken,
                 expiresIn: TimeSpan.FromSeconds(_tokenSettings.ExpiresInSeconds).TotalSeconds,
                 refreshToken: refreshToken,
-                claims: identityClaims.Claims.Select(c => new UserClaim(c.Type, c.Value))
+                claims: identityClaims.Claims.Select(c => new UserClaim(c.Value, c.Type))
             );
         }
 

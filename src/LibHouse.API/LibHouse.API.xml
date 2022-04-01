@@ -34,6 +34,16 @@
             <response code="400">Os dados enviados são inválidos ou houve uma falha na autenticação do usuário.</response>
             <response code="500">Erro ao processar a requisição no servidor.</response>
         </member>
+        <member name="M:LibHouse.API.V1.Controllers.UsersController.RefreshTokenAsync(LibHouse.API.V1.ViewModels.Users.UserRefreshTokenViewModel)">
+            <summary>
+            Renova um access token expirado a partir de um refresh token.
+            </summary>
+            <param name="userRefreshToken">Objeto que possui os dados necessários para renovar o access token.</param>
+            <returns>Em caso de sucesso, retorna um objeto com os dados do usuário e do novo token. Em caso de erro, retorna uma lista de notificações.</returns>
+            <response code="200">O token do usuário foi renovado com sucesso.</response>
+            <response code="400">Os dados enviados são inválidos ou houve uma falha na validação do refresh token.</response>
+            <response code="500">Erro ao processar a requisição no servidor.</response>
+        </member>
         <member name="T:LibHouse.API.V1.ViewModels.Users.ConfirmUserRegistrationViewModel">
             <summary>
             Objeto que possui os dados necessários para realizar a confirmação do registro de um usuário.
@@ -127,6 +137,16 @@
         <member name="T:LibHouse.API.V1.ViewModels.Users.UserRefreshTokenViewModel">
             <summary>
             Objeto que possui os dados necessários para obter um novo token de acesso
+            </summary>
+        </member>
+        <member name="P:LibHouse.API.V1.ViewModels.Users.UserRefreshTokenViewModel.AccessToken">
+            <summary>
+            O access token expirado que será renovado
+            </summary>
+        </member>
+        <member name="P:LibHouse.API.V1.ViewModels.Users.UserRefreshTokenViewModel.RefreshToken">
+            <summary>
+            O refresh token que será utilizado para renovar o access token
             </summary>
         </member>
     </members>

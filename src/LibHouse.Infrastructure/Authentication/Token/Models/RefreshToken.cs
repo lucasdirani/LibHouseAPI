@@ -9,7 +9,7 @@ namespace LibHouse.Infrastructure.Authentication.Token.Models
         public string UserId { get; }
         public string Token { get; }
         public string JwtId { get; }
-        public bool IsUsed { get; }
+        public bool IsUsed { get; private set; }
         public bool IsRevoked { get; }
         public DateTime CreatedAt { get; }
         public DateTime ExpiresIn { get; }
@@ -45,6 +45,11 @@ namespace LibHouse.Infrastructure.Authentication.Token.Models
             IsRevoked = isRevoked;
             CreatedAt = createdAt;
             ExpiresIn = expiresIn;
+        }
+
+        public void MarkAsUsed()
+        {
+            IsUsed = true;
         }
 
         public override string ToString()

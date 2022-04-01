@@ -1,6 +1,7 @@
 ﻿using LibHouse.Infrastructure.Authentication.Register;
 using LibHouse.Infrastructure.Authentication.Token.Generators;
 using LibHouse.Infrastructure.Authentication.Token.Settings;
+using LibHouse.Infrastructure.Authentication.Token.Validations;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -44,6 +45,8 @@ namespace LibHouse.API.Configurations.Authentication
             });
 
             services.AddScoped<ITokenGenerator, JwtTokenGenerator>();
+
+            services.AddSingleton<IRefreshTokenValidator, RefreshTokenValidator>();
 
             services.AddScoped<IUserSignUp, IdentityUserSignUp>();
 
