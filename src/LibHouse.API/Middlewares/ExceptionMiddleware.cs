@@ -1,10 +1,10 @@
 ﻿using KissLog;
 using LibHouse.API.Extensions.Common;
-using LibHouse.API.Extensions.Http;
+using LibHouse.Business.Notifiers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Net;
+using System.Net.Mime;
 using System.Threading.Tasks;
 
 namespace LibHouse.API.Middlewares
@@ -38,15 +38,13 @@ namespace LibHouse.API.Middlewares
         {
             if (!httpContext.Response.HasStarted)
             {
-                httpContext.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
+                httpContext.Response.StatusCode = new StatusCodeResult(500).StatusCode;
 
-                httpContext.Response.ContentType = "application/problem+json";
+                httpContext.Response.ContentType = MediaTypeNames.Application.Json;
 
-                ProblemDetails exceptionResponse = httpContext.BuildResponseFromException(exception);
+                Notification exceptionResponse = new(exception.Message, $"Unexpected error on {httpContext.Request.Path.Value}");
 
-                string jsonException = exceptionResponse.ToJson();
-
-                await httpContext.Response.WriteAsync(jsonException);
+                await httpContext.Response.WriteAsync(exceptionResponse.ToJson());
             }
         }
     }
