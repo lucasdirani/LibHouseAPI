@@ -33,14 +33,12 @@ namespace LibHouse.Infrastructure.Authentication.Register
             SignUpConfirmationToken confirmationToken,
             string userEmail)
         {
-            Maybe<IdentityUser> findUserByEmail = await _userManager.FindByEmailAsync(userEmail);
-
-            if (findUserByEmail.HasNoValue)
+            IdentityUser user = await _userManager.FindByEmailAsync(userEmail);
+             
+            if (user is null)
             {
                 return Result.Fail("O endereço de e-mail do usuário não foi localizado.");
             }
-
-            IdentityUser user = findUserByEmail.Value;
 
             IdentityResult userEmailConfirmed = await _userManager.ConfirmEmailAsync(user, confirmationToken.Value);
 

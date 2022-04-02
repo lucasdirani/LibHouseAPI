@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Ardalis.GuardClauses;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -9,8 +9,7 @@ namespace LibHouse.Infrastructure.Authentication.Extensions.Claims
     {
         public static string GetUserId(this ClaimsPrincipal claimsPrincipal)
         {
-            if (claimsPrincipal is null)
-                throw new ArgumentException($"Claims do usuário não encontradas: {nameof(GetUserId)}");
+            Guard.Against.Null(claimsPrincipal, nameof(claimsPrincipal), "Claims do usuário não encontradas");
 
             var claim = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier);
 
@@ -19,8 +18,7 @@ namespace LibHouse.Infrastructure.Authentication.Extensions.Claims
 
         public static string GetUserEmail(this ClaimsPrincipal claimsPrincipal)
         {
-            if (claimsPrincipal is null)
-                throw new ArgumentException($"Claims do usuário não encontradas: {nameof(GetUserEmail)}");
+            Guard.Against.Null(claimsPrincipal, nameof(claimsPrincipal), "Claims do usuário não encontradas");
 
             var claim = claimsPrincipal.FindFirst(ClaimTypes.Email);
 
@@ -29,8 +27,7 @@ namespace LibHouse.Infrastructure.Authentication.Extensions.Claims
 
         public static string GetUserName(this ClaimsPrincipal claimsPrincipal)
         {
-            if (claimsPrincipal is null)
-                throw new ArgumentException($"Claims do usuário não encontradas: {nameof(GetUserName)}");
+            Guard.Against.Null(claimsPrincipal, nameof(claimsPrincipal), "Claims do usuário não encontradas");
 
             var claim = claimsPrincipal.FindFirst(ClaimTypes.Name);
 
@@ -41,8 +38,7 @@ namespace LibHouse.Infrastructure.Authentication.Extensions.Claims
             this ClaimsPrincipal claimsPrincipal, 
             IList<string> roles)
         {
-            if (claimsPrincipal is null)
-                throw new ArgumentException($"Claims do usuário não encontradas: {nameof(CheckIfUserHasOneOfTheseRoles)}");
+            Guard.Against.Null(claimsPrincipal, nameof(claimsPrincipal), "Claims do usuário não encontradas");
 
             var claims = claimsPrincipal.FindAll(ClaimTypes.Role);
 

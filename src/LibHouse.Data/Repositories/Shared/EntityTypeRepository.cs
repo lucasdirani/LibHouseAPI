@@ -1,5 +1,4 @@
 ﻿using LibHouse.Business.Entities.Shared;
-using LibHouse.Business.Monads;
 using LibHouse.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -29,7 +28,7 @@ namespace LibHouse.Data.Repositories.Shared
             return await _dbSet.CountAsync(expression);
         }
 
-        public async Task<Maybe<T>> FirstAsync(Expression<Func<T, bool>> expression)
+        public async Task<T> FirstAsync(Expression<Func<T, bool>> expression)
         {
             return await _dbSet.FirstAsync(expression);
         }
@@ -59,7 +58,7 @@ namespace LibHouse.Data.Repositories.Shared
             return await query.ToListAsync();
         }
 
-        public async Task<Maybe<T>> GetByIdAsync(Guid id)
+        public async Task<T> GetByIdAsync(Guid id)
         {
             return await _dbSet.FindAsync(id);
         }

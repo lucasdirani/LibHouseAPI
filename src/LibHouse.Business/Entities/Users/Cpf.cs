@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ardalis.GuardClauses;
+using System;
 
 namespace LibHouse.Business.Entities.Users
 {
@@ -15,10 +16,7 @@ namespace LibHouse.Business.Entities.Users
 
         public static Cpf CreateFromDocument(string document)
         {
-            if (string.IsNullOrEmpty(document))
-            {
-                throw new ArgumentNullException(nameof(document), "O documento é obrigatório");
-            }
+            Guard.Against.NullOrWhiteSpace(document, nameof(document), "O documento é obrigatório.");
 
             bool isValidDocument = Validate(document);
 

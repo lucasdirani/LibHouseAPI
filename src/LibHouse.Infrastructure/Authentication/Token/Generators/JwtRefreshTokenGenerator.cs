@@ -1,4 +1,5 @@
-﻿using LibHouse.Infrastructure.Authentication.Token.Models;
+﻿using Ardalis.GuardClauses;
+using LibHouse.Infrastructure.Authentication.Token.Models;
 using LibHouse.Infrastructure.Shared.Helpers.String;
 using Microsoft.AspNetCore.Identity;
 using System;
@@ -24,10 +25,7 @@ namespace LibHouse.Infrastructure.Authentication.Token.Generators
 
         public RefreshToken GenerateRefreshToken(string accessTokenId)
         {
-            if (string.IsNullOrEmpty(accessTokenId))
-            {
-                throw new ArgumentNullException(nameof(accessTokenId), "O id do token é obrigatório");
-            }
+            Guard.Against.NullOrEmpty(accessTokenId, nameof(accessTokenId), "O id do token é obrigatório");
 
             return new RefreshToken(
                 token: GenerateTokenSequence(RefreshTokenLength),

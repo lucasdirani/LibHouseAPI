@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Ardalis.GuardClauses;
 using System.Web;
 
 namespace LibHouse.Infrastructure.Authentication.Token.Models
@@ -10,10 +10,7 @@ namespace LibHouse.Infrastructure.Authentication.Token.Models
 
         public SignUpConfirmationToken(string value, bool isEncoded = false)
         {
-            if (string.IsNullOrEmpty(value))
-            {
-                throw new ArgumentNullException(nameof(value), "O valor do token é obrigatório.");
-            }
+            Guard.Against.NullOrEmpty(value, nameof(value), "O valor do token é obrigatório");
 
             Value = isEncoded ? HttpUtility.HtmlDecode(value) : value;
         }
