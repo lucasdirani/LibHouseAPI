@@ -10,9 +10,9 @@ namespace LibHouse.Infrastructure.Authentication.Register.Messages
             SignUpConfirmationToken confirmationToken,
             string confirmEmailAddress)
         {
-            return $"{user.Name}, seja bem-vindo(a) ao LibHouse.\n\n Se você solicitou o cadastro " +
-                $"na plataforma, confirme o seu e-mail clicando neste link: {confirmEmailAddress}?" +
-                $"confirmationToken={confirmationToken.EncodedValue}&userEmail={user.Email}&userId={user.Id}";
+            return $"{user.Name}, seja bem-vindo(a) ao LibHouse. Se você solicitou o cadastro " +
+                $"na plataforma, confirme o seu e-mail clicando neste link: {confirmEmailAddress}/" +
+                $"{user.Email}/{user.Id}/{confirmationToken.EncodedValue}";
         }
     }
 }
