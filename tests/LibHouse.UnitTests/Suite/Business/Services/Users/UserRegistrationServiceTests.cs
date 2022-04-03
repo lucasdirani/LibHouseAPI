@@ -72,6 +72,34 @@ namespace LibHouse.UnitTests.Suite.Business.Services.Users
             Assert.True(userRegistrationResult.Failure);
         }
 
+        [Fact]
+        public async Task ConfirmUserRegistrationAsync_NewRegisteredUserWhoHasNotYetConfirmedTheirAccount_ReturnsSuccess()
+        {
+            IUserRegistrationService userRegistrationService = new UserRegistrationService(_notifier, _unitOfWork, _userRegistrationValidator);
+
+            SetupUserRegistrationServiceTests.SetupScenarioForValidUserResidentWithUnregisteredCpfAndEmail(LibHouseContext);
+
+            User user = new Resident("Lucas", "Dirani", new DateTime(1998, 8, 12), Gender.Male, "11978192183", "lucas.dirani@gmail.com", Cpf.CreateFromDocument("95339604004"));
+
+            _ = await userRegistrationService.RegisterUserAsync(user);
+
+            Result userConfirmationResult = await userRegistrationService.ConfirmUserRegistrationAsync(user.Id);
+
+            Assert.True(userConfirmationResult.IsSuccess);
+        }
+
+        [Fact]
+        public async Task ConfirmUserRegistrationAsync_UnregisteredUserTryingToConfirmHisAccount_ReturnsFailure()
+        {
+            IUserRegistrationService userRegistrationService = new UserRegistrationService(_notifier, _unitOfWork, _userRegistrationValidator);
+
+            User unregisteredUser = new Resident("Luan", "Silva", new DateTime(2000, 1, 15), Gender.Male, "11972142593", "luansilva@gmail.com", Cpf.CreateFromDocument("95339604004"));
+
+            Result userConfirmationResult = await userRegistrationService.ConfirmUserRegistrationAsync(unregisteredUser.Id);
+
+            Assert.True(userConfirmationResult.Failure);
+        }
+
         public void Dispose()
         {
             RestartLibHouseContext();
