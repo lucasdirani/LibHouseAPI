@@ -3,7 +3,7 @@ using LibHouse.Business.Monads;
 using LibHouse.Infrastructure.Authentication.Token.Models;
 using System.Threading.Tasks;
 
-namespace LibHouse.Infrastructure.Authentication.Register
+namespace LibHouse.Infrastructure.Authentication.Register.SignUp
 {
     public interface IUserSignUp
     {

@@ -1,7 +1,7 @@
 ﻿using LibHouse.Business.Monads;
 using System.Threading.Tasks;
 
-namespace LibHouse.Infrastructure.Authentication.Register
+namespace LibHouse.Infrastructure.Authentication.Register.SignIn
 {
     public interface IUserSignIn
     {

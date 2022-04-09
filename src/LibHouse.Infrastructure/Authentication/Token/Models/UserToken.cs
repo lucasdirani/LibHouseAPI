@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LibHouse.Infrastructure.Authentication.Login;
+using System;
 using System.Collections.Generic;
 
 namespace LibHouse.Infrastructure.Authentication.Token.Models

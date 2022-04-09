@@ -1,4 +1,6 @@
 ﻿using LibHouse.Infrastructure.Authentication.Register;
+using LibHouse.Infrastructure.Authentication.Register.SignIn;
+using LibHouse.Infrastructure.Authentication.Register.SignUp;
 using LibHouse.Infrastructure.Authentication.Token.Generators;
 using LibHouse.Infrastructure.Authentication.Token.Settings;
 using LibHouse.Infrastructure.Authentication.Token.Validations;

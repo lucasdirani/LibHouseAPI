@@ -2,7 +2,7 @@
 using KissLog;
 using LibHouse.Business.Monads;
 using LibHouse.Business.Notifiers;
-using LibHouse.Infrastructure.Authentication.Token.Login;
+using LibHouse.Infrastructure.Authentication.Login;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.Linq;

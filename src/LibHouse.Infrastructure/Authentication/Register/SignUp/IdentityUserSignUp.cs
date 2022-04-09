@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using System.Threading.Tasks;
 
-namespace LibHouse.Infrastructure.Authentication.Register
+namespace LibHouse.Infrastructure.Authentication.Register.SignUp
 {
     public class IdentityUserSignUp : IUserSignUp
     {

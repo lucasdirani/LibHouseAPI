@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
 
-namespace LibHouse.Infrastructure.Authentication.Register
+namespace LibHouse.Infrastructure.Authentication.Register.SignIn
 {
     public class IdentityUserSignIn : IUserSignIn
     {

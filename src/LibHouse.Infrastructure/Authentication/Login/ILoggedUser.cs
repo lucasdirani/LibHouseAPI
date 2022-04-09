@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Security.Claims;
 
-namespace LibHouse.Infrastructure.Authentication.Token.Login
+namespace LibHouse.Infrastructure.Authentication.Login
 {
     public interface ILoggedUser
     {

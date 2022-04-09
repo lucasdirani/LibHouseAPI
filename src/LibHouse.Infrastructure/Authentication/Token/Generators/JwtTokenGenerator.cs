@@ -1,6 +1,7 @@
 ﻿using LibHouse.Business.Entities.Users;
 using LibHouse.Infrastructure.Authentication.Context;
 using LibHouse.Infrastructure.Authentication.Extensions.Common;
+using LibHouse.Infrastructure.Authentication.Login;
 using LibHouse.Infrastructure.Authentication.Token.Models;
 using LibHouse.Infrastructure.Authentication.Token.Settings;
 using Microsoft.AspNetCore.Identity;

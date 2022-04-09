@@ -1,7 +1,7 @@
 ﻿using LibHouse.Business.Entities.Users;
 using System;
 
-namespace LibHouse.Infrastructure.Authentication.Token.Models
+namespace LibHouse.Infrastructure.Authentication.Login
 {
     public class AuthenticatedUser
     {
