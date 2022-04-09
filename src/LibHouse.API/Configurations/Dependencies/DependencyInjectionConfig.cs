@@ -8,7 +8,7 @@ using LibHouse.Business.Validations.Users;
 using LibHouse.Data.Context;
 using LibHouse.Data.Repositories.Users;
 using LibHouse.Data.Transactions;
-using LibHouse.Infrastructure.Authentication.Login;
+using LibHouse.Infrastructure.Authentication.Login.Interfaces;
 using LibHouse.Infrastructure.Shared.Settings;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;

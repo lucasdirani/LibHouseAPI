@@ -1,4 +1,4 @@
-﻿using LibHouse.Infrastructure.Authentication.Login;
+﻿using LibHouse.Infrastructure.Authentication.Login.Models;
 using System;
 using System.Collections.Generic;
 

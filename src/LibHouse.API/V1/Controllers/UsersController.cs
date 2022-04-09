@@ -8,7 +8,7 @@ using LibHouse.Business.Entities.Users;
 using LibHouse.Business.Monads;
 using LibHouse.Business.Notifiers;
 using LibHouse.Infrastructure.Authentication.Context;
-using LibHouse.Infrastructure.Authentication.Login;
+using LibHouse.Infrastructure.Authentication.Login.Interfaces;
 using LibHouse.Infrastructure.Authentication.Register.SignIn;
 using LibHouse.Infrastructure.Authentication.Register.SignUp;
 using LibHouse.Infrastructure.Authentication.Token.Generators;
