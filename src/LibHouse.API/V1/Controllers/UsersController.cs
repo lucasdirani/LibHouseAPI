@@ -193,7 +193,7 @@ namespace LibHouse.API.V1.Controllers
         /// <response code="500">Erro ao processar a requisição no servidor.</response>
         [Authorize("User")]
         [HttpPost("refresh-token", Name = "Refresh Token")]
-        public async Task<ActionResult> RefreshTokenAsync(UserRefreshTokenViewModel userRefreshToken)
+        public async Task<ActionResult<UserToken>> RefreshTokenAsync(UserRefreshTokenViewModel userRefreshToken)
         {
             if (ModelState.NotValid())
             {

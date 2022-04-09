@@ -41,7 +41,7 @@ namespace LibHouse.UnitTests.Suite.Infrastructure.Authentication.Token.Validatio
 
             RefreshToken refreshToken = SetupRefreshTokenValidatorTests.SetupRefreshToken(validatedToken, userWhoOwnsTheToken);
 
-            await AwaitForAccessTokenExpire(userToken.ExpiresIn);
+            await AwaitForAccessTokenExpire(tokenExpirationInSeconds);
 
             Result refreshTokenValidation = _refreshTokenValidator.CheckIfRefreshTokenCanBeUsedWithAccessToken(refreshToken, validatedToken, accessTokenClaims);
 
@@ -87,7 +87,7 @@ namespace LibHouse.UnitTests.Suite.Infrastructure.Authentication.Token.Validatio
 
             RefreshToken refreshToken = SetupRefreshTokenValidatorTests.SetupRefreshToken(validatedToken, userWhoOwnsTheToken, isUsed: true);
 
-            await AwaitForAccessTokenExpire(userToken.ExpiresIn);
+            await AwaitForAccessTokenExpire(tokenExpirationInSeconds);
 
             Result refreshTokenValidation = _refreshTokenValidator.CheckIfRefreshTokenCanBeUsedWithAccessToken(refreshToken, validatedToken, accessTokenClaims);
 
@@ -111,7 +111,7 @@ namespace LibHouse.UnitTests.Suite.Infrastructure.Authentication.Token.Validatio
 
             RefreshToken refreshToken = SetupRefreshTokenValidatorTests.SetupRefreshToken(validatedToken, userWhoOwnsTheToken, isRevoked: true);
 
-            await AwaitForAccessTokenExpire(userToken.ExpiresIn);
+            await AwaitForAccessTokenExpire(tokenExpirationInSeconds);
 
             Result refreshTokenValidation = _refreshTokenValidator.CheckIfRefreshTokenCanBeUsedWithAccessToken(refreshToken, validatedToken, accessTokenClaims);
 
@@ -135,7 +135,7 @@ namespace LibHouse.UnitTests.Suite.Infrastructure.Authentication.Token.Validatio
 
             RefreshToken refreshToken = SetupRefreshTokenValidatorTests.SetupRefreshToken(validatedToken, userWhoOwnsTheToken, jwtId: Guid.NewGuid().ToString());
 
-            await AwaitForAccessTokenExpire(userToken.ExpiresIn);
+            await AwaitForAccessTokenExpire(tokenExpirationInSeconds);
 
             Result refreshTokenValidation = _refreshTokenValidator.CheckIfRefreshTokenCanBeUsedWithAccessToken(refreshToken, validatedToken, accessTokenClaims);
 
@@ -163,7 +163,7 @@ namespace LibHouse.UnitTests.Suite.Infrastructure.Authentication.Token.Validatio
 
             RefreshToken refreshToken = SetupRefreshTokenValidatorTests.SetupRefreshToken(validatedToken, userWhoOwnsTheToken, refreshTokenCreatedAt, refreshTokenExpiresIn);
 
-            await AwaitForAccessTokenExpire(userToken.ExpiresIn);
+            await AwaitForAccessTokenExpire(tokenExpirationInSeconds);
 
             Result refreshTokenValidation = _refreshTokenValidator.CheckIfRefreshTokenCanBeUsedWithAccessToken(refreshToken, validatedToken, accessTokenClaims);
 

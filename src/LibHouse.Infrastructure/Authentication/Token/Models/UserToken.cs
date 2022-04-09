@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace LibHouse.Infrastructure.Authentication.Token.Models
 {
@@ -18,14 +19,19 @@ namespace LibHouse.Infrastructure.Authentication.Token.Models
         public string AccessToken { get; }
 
         /// <summary>
-        /// O tempo de expiração em segundos do token de acesso
+        /// A data e hora de expiração do token de acesso
         /// </summary>
-        public double ExpiresIn { get; }
+        public DateTime ExpiresInAccessToken { get; }
 
         /// <summary>
         /// O token de renovação atrelado ao token de acesso do usuário
         /// </summary>
         public string RefreshToken { get; }
+
+        /// <summary>
+        /// A data e hora de expiração do refresh token
+        /// </summary>
+        public DateTime ExpiresInRefreshToken { get; }
 
         /// <summary>
         /// A lista de claims pertencentes ao usuário
@@ -35,14 +41,16 @@ namespace LibHouse.Infrastructure.Authentication.Token.Models
         public UserToken(
             AuthenticatedUser user, 
             string accessToken, 
-            double expiresIn, 
+            DateTime expiresInAccessToken, 
             string refreshToken,
+            DateTime expiresInRefreshToken,
             IEnumerable<UserClaim> claims)
         {
             User = user;
             AccessToken = accessToken;
-            ExpiresIn = expiresIn;
+            ExpiresInAccessToken = expiresInAccessToken;
             RefreshToken = refreshToken;
+            ExpiresInRefreshToken = expiresInRefreshToken;
             Claims = claims;
         }
     }

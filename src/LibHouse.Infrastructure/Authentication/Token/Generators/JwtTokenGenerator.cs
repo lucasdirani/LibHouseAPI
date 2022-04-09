@@ -42,13 +42,14 @@ namespace LibHouse.Infrastructure.Authentication.Token.Generators
 
             (SecurityToken securityToken, string accessToken) = GenerateAccessToken(identityClaims);
 
-            string refreshToken = await GenerateAndStoreRefreshTokenAsync(user, securityToken.Id);
+            RefreshToken refreshToken = await GenerateAndStoreRefreshTokenAsync(user, securityToken.Id);
 
             return new UserToken(
                 user: await GetAuthenticatedUserDataAsync(userEmail),
                 accessToken: accessToken,
-                expiresIn: TimeSpan.FromSeconds(_tokenSettings.ExpiresInSeconds).TotalSeconds,
-                refreshToken: refreshToken,
+                expiresInAccessToken: DateTime.UtcNow.AddSeconds(_tokenSettings.ExpiresInSeconds),
+                refreshToken: refreshToken.Token,
+                expiresInRefreshToken: refreshToken.ExpiresIn,
                 claims: identityClaims.Claims.Select(c => new UserClaim(c.Value, c.Type))
             );
         }
@@ -61,7 +62,7 @@ namespace LibHouse.Infrastructure.Authentication.Token.Generators
             );
         }
 
-        private async Task<string> GenerateAndStoreRefreshTokenAsync(IdentityUser user, string accessTokenId)
+        private async Task<RefreshToken> GenerateAndStoreRefreshTokenAsync(IdentityUser user, string accessTokenId)
         {
             IRefreshTokenGenerator refreshTokenGenerator = new JwtRefreshTokenGenerator(user);
 
@@ -71,7 +72,7 @@ namespace LibHouse.Infrastructure.Authentication.Token.Generators
 
             await _authenticationContext.SaveChangesAsync();
 
-            return refreshToken.Token;
+            return refreshToken;
         }
 
         private (SecurityToken securityToken, string accessToken) GenerateAccessToken(ClaimsIdentity identityClaims)
