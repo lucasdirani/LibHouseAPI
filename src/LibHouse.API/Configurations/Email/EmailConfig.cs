@@ -1,4 +1,5 @@
-﻿using LibHouse.Infrastructure.Email;
+﻿using LibHouse.Infrastructure.Email.Services;
+using LibHouse.Infrastructure.Email.Settings;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 

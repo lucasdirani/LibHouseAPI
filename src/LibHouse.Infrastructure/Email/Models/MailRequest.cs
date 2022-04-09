@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace LibHouse.Infrastructure.Email
+namespace LibHouse.Infrastructure.Email.Models
 {
     public class MailRequest
     {

@@ -1,4 +1,4 @@
-﻿namespace LibHouse.Infrastructure.Email
+﻿namespace LibHouse.Infrastructure.Email.Settings
 {
     public class MailSettings
     {

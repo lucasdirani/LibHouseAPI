@@ -1,4 +1,6 @@
 ﻿using LibHouse.Business.Monads;
+using LibHouse.Infrastructure.Email.Models;
+using LibHouse.Infrastructure.Email.Settings;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using Microsoft.Extensions.Options;
@@ -6,7 +8,7 @@ using MimeKit;
 using System;
 using System.Threading.Tasks;
 
-namespace LibHouse.Infrastructure.Email
+namespace LibHouse.Infrastructure.Email.Services
 {
     public class MailKitService : IMailService
     {
