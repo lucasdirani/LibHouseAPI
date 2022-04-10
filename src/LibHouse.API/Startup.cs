@@ -65,8 +65,6 @@ namespace LibHouse.API
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-
-                app.UseCors("Development");
             }
 
             app.UseForwardedHeaders(new ForwardedHeadersOptions
@@ -79,7 +77,7 @@ namespace LibHouse.API
 
             app.UseLoggingConfiguration(Configuration);
 
-            app.UseMvcConfiguration();
+            app.UseMvcConfiguration(env);
 
             app.UseSwaggerConfig(provider);
         }

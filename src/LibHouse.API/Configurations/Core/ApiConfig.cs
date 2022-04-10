@@ -1,7 +1,9 @@
 ﻿using LibHouse.API.Configurations.Versioning;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using System.Text.Json.Serialization;
 
 namespace LibHouse.API.Configurations.Core
@@ -10,6 +12,8 @@ namespace LibHouse.API.Configurations.Core
     {
         public static IServiceCollection AddWebApiConfig(this IServiceCollection services)
         {
+            services.AddCorsConfig();
+
             services.AddMvcCore(options =>
             {
                 options.ReturnHttpNotAcceptable = true;
@@ -25,18 +29,23 @@ namespace LibHouse.API.Configurations.Core
 
             services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
 
-            services.AddCorsConfig();
-
             return services;
         }
 
-        public static IApplicationBuilder UseMvcConfiguration(this IApplicationBuilder app)
+        public static IApplicationBuilder UseMvcConfiguration(
+            this IApplicationBuilder app,
+            IWebHostEnvironment env)
         {
             app.UseHttpsRedirection();
 
-            app.UseAuthentication();
-
             app.UseRouting();
+
+            if (env.IsDevelopment())
+            {
+                app.UseCors("Development");
+            }
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

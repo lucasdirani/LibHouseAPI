@@ -27,7 +27,7 @@ namespace LibHouse.Data.Configurations.Users
 
             builder.Property(u => u.UserType).HasConversion(new EnumToStringConverter<UserType>()).HasColumnType("varchar").HasMaxLength(8).IsRequired();
 
-            builder.Property(u => u.Active).HasColumnType("bit").HasDefaultValueSql("1").IsRequired();
+            builder.Property(u => u.Active).HasColumnType("bit").IsRequired();
 
             builder.Property(u => u.CreatedAt).HasColumnType("datetime").HasDefaultValueSql("GETDATE()").IsRequired();
 
@@ -36,8 +36,6 @@ namespace LibHouse.Data.Configurations.Users
             builder.OwnsOne(u => u.CPF).Property(c => c.Value).HasColumnType("char").HasMaxLength(11).HasColumnName("Cpf").IsRequired();
            
             builder.HasIndex(u => u.Email).IsUnique().HasDatabaseName("idx_user_email");
-
-            builder.HasQueryFilter(u => u.Active);
         }
     }
 }
