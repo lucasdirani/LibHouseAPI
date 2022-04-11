@@ -121,7 +121,7 @@ namespace LibHouse.API.V1.Controllers
         [AllowAnonymous]
         [HttpPatch("confirm-registration", Name = "Confirm User Registration")]
         public async Task<ActionResult> ConfirmUserRegistrationAsync(
-            [FromQuery] ConfirmUserRegistrationViewModel confirmUserRegistration)
+            [FromBody] ConfirmUserRegistrationViewModel confirmUserRegistration)
         {
             if (ModelState.NotValid())
             {
@@ -135,7 +135,7 @@ namespace LibHouse.API.V1.Controllers
                 return CustomResponseForPatchEndpoint(userConfirmed);
             }
 
-            SignUpConfirmationToken confirmationToken = new(confirmUserRegistration.ConfirmationToken, isEncoded: true);
+            SignUpConfirmationToken confirmationToken = new(confirmUserRegistration.ConfirmationToken, isEncoded: false);
 
             Result userConfirmationAccepted = await _userSignUp.AcceptUserConfirmationTokenAsync(confirmationToken, confirmUserRegistration.UserEmail);
 
