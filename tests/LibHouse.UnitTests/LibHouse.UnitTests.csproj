@@ -29,7 +29,6 @@
     <ProjectReference Include="..\..\src\LibHouse.API\LibHouse.API.csproj" />
     <ProjectReference Include="..\..\src\LibHouse.Business\LibHouse.Business.csproj" />
     <ProjectReference Include="..\..\src\LibHouse.Data\LibHouse.Data.csproj" />
-    <ProjectReference Include="..\..\src\LibHouse.Infrastructure\LibHouse.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

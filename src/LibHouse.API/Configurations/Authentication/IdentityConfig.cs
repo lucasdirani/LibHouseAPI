@@ -1,5 +1,5 @@
 ﻿using LibHouse.Infrastructure.Authentication.Context;
-using LibHouse.Infrastructure.Authentication.Token.Providers;
+using LibHouse.Infrastructure.Authentication.Token.Providers.EmailConfirmation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;

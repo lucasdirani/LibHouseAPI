@@ -29,7 +29,8 @@
   <ItemGroup>
     <ProjectReference Include="..\LibHouse.Business\LibHouse.Business.csproj" />
     <ProjectReference Include="..\LibHouse.Data\LibHouse.Data.csproj" />
-    <ProjectReference Include="..\LibHouse.Infrastructure\LibHouse.Infrastructure.csproj" />
+    <ProjectReference Include="..\LibHouse.Infrastructure.Authentication\LibHouse.Infrastructure.Authentication.csproj" />
+    <ProjectReference Include="..\LibHouse.Infrastructure.Cache\LibHouse.Infrastructure.Cache.csproj" />
   </ItemGroup>
 
 

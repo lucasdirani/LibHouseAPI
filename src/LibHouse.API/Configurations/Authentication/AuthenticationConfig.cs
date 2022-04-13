@@ -1,9 +1,10 @@
-﻿using LibHouse.Infrastructure.Authentication.Register;
-using LibHouse.Infrastructure.Authentication.Register.SignIn;
+﻿using LibHouse.Infrastructure.Authentication.Register.SignIn;
 using LibHouse.Infrastructure.Authentication.Register.SignUp;
-using LibHouse.Infrastructure.Authentication.Token.Generators;
+using LibHouse.Infrastructure.Authentication.Token.Generators.AccessTokens;
+using LibHouse.Infrastructure.Authentication.Token.Generators.RefreshTokens;
 using LibHouse.Infrastructure.Authentication.Token.Settings;
 using LibHouse.Infrastructure.Authentication.Token.Validations;
+using LibHouse.Infrastructure.Authentication.Token.Validations.RefreshTokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,10 +19,13 @@ namespace LibHouse.API.Configurations.Authentication
             this IServiceCollection services,
             IConfiguration configuration)
         {
-            var tokenSettingsSection = configuration.GetSection("TokenSettings");
-            services.Configure<TokenSettings>(tokenSettingsSection);
+            var tokenSettingsSection = configuration.GetSection("AccessTokenSettings");
+            services.Configure<AccessTokenSettings>(tokenSettingsSection);
 
-            var tokenSettings = tokenSettingsSection.Get<TokenSettings>();
+            var refreshTokenSettingsSection = configuration.GetSection("RefreshTokenSettings");
+            services.Configure<RefreshTokenSettings>(refreshTokenSettingsSection);
+
+            var tokenSettings = tokenSettingsSection.Get<AccessTokenSettings>();
             var key = Encoding.ASCII.GetBytes(tokenSettings.Secret);
             var tokenValidationParameters = new TokenValidationParameters
             {
@@ -46,7 +50,9 @@ namespace LibHouse.API.Configurations.Authentication
                 x.TokenValidationParameters = tokenValidationParameters;
             });
 
-            services.AddScoped<ITokenGenerator, JwtTokenGenerator>();
+            services.AddScoped<IRefreshTokenGenerator, JwtRefreshTokenGenerator>();
+
+            services.AddScoped<IAccessTokenGenerator, JwtAccessTokenGenerator>();
 
             services.AddSingleton<IRefreshTokenValidator, RefreshTokenValidator>();
 
