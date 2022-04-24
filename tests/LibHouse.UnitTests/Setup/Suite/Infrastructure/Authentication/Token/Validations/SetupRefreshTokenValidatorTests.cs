@@ -1,7 +1,6 @@
-﻿using LibHouse.Data.Context;
-using LibHouse.Data.Repositories.Users;
-using LibHouse.Infrastructure.Authentication.Context;
-using LibHouse.Infrastructure.Authentication.Token.Generators;
+﻿using LibHouse.Infrastructure.Authentication.Context;
+using LibHouse.Infrastructure.Authentication.Token.Generators.AccessTokens;
+using LibHouse.Infrastructure.Authentication.Token.Generators.RefreshTokens;
 using LibHouse.Infrastructure.Authentication.Token.Models;
 using LibHouse.Infrastructure.Authentication.Token.Settings;
 using LibHouse.UnitTests.Helpers;
@@ -21,6 +20,8 @@ namespace LibHouse.UnitTests.Setup.Suite.Infrastructure.Authentication.Token.Val
         private static readonly string _tokenKey = Guid.NewGuid().ToString();
         private static readonly string _tokenIssuer = "LibHouse";
         private static readonly string _tokenValidIn = "https://localhost";
+        private static readonly int _refreshTokenExpiresInMonths = 3;
+        private static readonly int _refreshTokenLength = 35;
 
         internal static TokenValidationParameters SetupTokenValidationParameters()
         {
@@ -52,35 +53,76 @@ namespace LibHouse.UnitTests.Setup.Suite.Infrastructure.Authentication.Token.Val
                 isRevoked: isRevoked, 
                 createdAt: createdAt ?? DateTime.UtcNow,
                 expiresIn: expiresIn ?? DateTime.UtcNow.AddDays(3), 
-                user: userWhoOwnsTheToken);
+                user: userWhoOwnsTheToken
+            );
         }
 
-        internal static ITokenGenerator SetupTokenGenerator(
+        internal static IAccessTokenGenerator SetupTokenGenerator(
             IdentityUser userWhoOwnsTheToken,
-            LibHouseContext libHouseContext,
             AuthenticationContext authenticationContext,
             int tokenExpirationInSeconds)
         {
-            Mock<UserManager<IdentityUser>> userManager = MockHelper.CreateMockForUserManager();
-            userManager.Setup(u => u.FindByEmailAsync(userWhoOwnsTheToken.Email)).ReturnsAsync(userWhoOwnsTheToken);
-            userManager.Setup(u => u.GetClaimsAsync(userWhoOwnsTheToken)).ReturnsAsync(new List<Claim>());
-            userManager.Setup(u => u.GetRolesAsync(userWhoOwnsTheToken)).ReturnsAsync(new List<string>());
+            UserManager<IdentityUser> userManager = SetupUserManager(userWhoOwnsTheToken);
 
-            Mock<IOptions<TokenSettings>> tokenSettings = new();
-            tokenSettings.Setup(t => t.Value).Returns(new TokenSettings() 
-            { 
-                Secret = _tokenKey, 
-                ExpiresInSeconds = tokenExpirationInSeconds, 
-                Issuer = _tokenIssuer, 
+            IOptions<AccessTokenSettings> tokenSettings = SetupAccessTokenSettings(tokenExpirationInSeconds);
+
+            IRefreshTokenGenerator refreshTokenGenerator = SetupRefreshTokenGenerator(userManager, authenticationContext);
+
+            return new JwtAccessTokenGenerator(
+                userManager, 
+                tokenSettings,
+                refreshTokenGenerator
+            );
+        }
+
+        private static IRefreshTokenGenerator SetupRefreshTokenGenerator(
+            UserManager<IdentityUser> userManager,
+            AuthenticationContext authenticationContext)
+        {
+            IOptions<RefreshTokenSettings> refreshTokenSettings = SetupRefreshTokenSettings();
+
+            return new JwtRefreshTokenGenerator(userManager, authenticationContext, refreshTokenSettings);
+        }
+
+        private static IOptions<AccessTokenSettings> SetupAccessTokenSettings(int tokenExpirationInSeconds)
+        {
+            Mock<IOptions<AccessTokenSettings>> tokenSettings = new();
+
+            tokenSettings.Setup(t => t.Value).Returns(new AccessTokenSettings()
+            {
+                Secret = _tokenKey,
+                ExpiresInSeconds = tokenExpirationInSeconds,
+                Issuer = _tokenIssuer,
                 ValidIn = _tokenValidIn
             });
 
-            return new JwtTokenGenerator(
-                userManager.Object, 
-                authenticationContext, 
-                new UserRepository(libHouseContext), 
-                tokenSettings.Object
-            );
+            return tokenSettings.Object;
+        }
+
+        private static IOptions<RefreshTokenSettings> SetupRefreshTokenSettings()
+        {
+            Mock<IOptions<RefreshTokenSettings>> refreshTokenSettings = new();
+
+            refreshTokenSettings.Setup(t => t.Value).Returns(new RefreshTokenSettings()
+            {
+                ExpiresInMonths = _refreshTokenExpiresInMonths,
+                TokenLength = _refreshTokenLength
+            });
+
+            return refreshTokenSettings.Object;
+        }
+
+        private static UserManager<IdentityUser> SetupUserManager(IdentityUser userWhoOwnsTheToken)
+        {
+            Mock<UserManager<IdentityUser>> userManager = MockHelper.CreateMockForUserManager();
+
+            userManager.Setup(u => u.FindByEmailAsync(userWhoOwnsTheToken.Email)).ReturnsAsync(userWhoOwnsTheToken);
+
+            userManager.Setup(u => u.GetClaimsAsync(userWhoOwnsTheToken)).ReturnsAsync(new List<Claim>());
+
+            userManager.Setup(u => u.GetRolesAsync(userWhoOwnsTheToken)).ReturnsAsync(new List<string>());
+
+            return userManager.Object;
         }
     }
 }

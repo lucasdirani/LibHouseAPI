@@ -1,6 +1,6 @@
 ﻿using LibHouse.Business.Monads;
 using LibHouse.Infrastructure.Authentication.Token.Models;
-using LibHouse.Infrastructure.Authentication.Token.Validations;
+using LibHouse.Infrastructure.Authentication.Token.Validations.RefreshTokens;
 using LibHouse.UnitTests.Configuration;
 using LibHouse.UnitTests.Setup.Suite.Infrastructure.Authentication.Token.Validations;
 using Microsoft.AspNetCore.Identity;
@@ -31,13 +31,13 @@ namespace LibHouse.UnitTests.Suite.Infrastructure.Authentication.Token.Validatio
 
             int tokenExpirationInSeconds = 1;
 
-            var tokenGenerator = SetupRefreshTokenValidatorTests.SetupTokenGenerator(userWhoOwnsTheToken, LibHouseContext, AuthenticationContext, tokenExpirationInSeconds);
+            var tokenGenerator = SetupRefreshTokenValidatorTests.SetupTokenGenerator(userWhoOwnsTheToken, AuthenticationContext, tokenExpirationInSeconds);
 
             TokenValidationParameters tokenValidationParams = SetupRefreshTokenValidatorTests.SetupTokenValidationParameters();
 
-            UserToken userToken = await tokenGenerator.GenerateUserTokenAsync(userWhoOwnsTheToken.Email);
+            AccessToken userToken = await tokenGenerator.GenerateAccessTokenAsync(userWhoOwnsTheToken.Email);
 
-            ClaimsPrincipal accessTokenClaims = _tokenHandler.ValidateToken(userToken.AccessToken, tokenValidationParams, out var validatedToken);
+            ClaimsPrincipal accessTokenClaims = _tokenHandler.ValidateToken(userToken.Value, tokenValidationParams, out var validatedToken);
 
             RefreshToken refreshToken = SetupRefreshTokenValidatorTests.SetupRefreshToken(validatedToken, userWhoOwnsTheToken);
 
@@ -55,13 +55,13 @@ namespace LibHouse.UnitTests.Suite.Infrastructure.Authentication.Token.Validatio
 
             int tokenExpirationInSeconds = 600;
 
-            var tokenGenerator = SetupRefreshTokenValidatorTests.SetupTokenGenerator(userWhoOwnsTheToken, LibHouseContext, AuthenticationContext, tokenExpirationInSeconds);
+            var tokenGenerator = SetupRefreshTokenValidatorTests.SetupTokenGenerator(userWhoOwnsTheToken, AuthenticationContext, tokenExpirationInSeconds);
 
             TokenValidationParameters tokenValidationParams = SetupRefreshTokenValidatorTests.SetupTokenValidationParameters();
 
-            UserToken userToken = await tokenGenerator.GenerateUserTokenAsync(userWhoOwnsTheToken.Email);
+            AccessToken userToken = await tokenGenerator.GenerateAccessTokenAsync(userWhoOwnsTheToken.Email);
 
-            ClaimsPrincipal accessTokenClaims = _tokenHandler.ValidateToken(userToken.AccessToken, tokenValidationParams, out var validatedToken);
+            ClaimsPrincipal accessTokenClaims = _tokenHandler.ValidateToken(userToken.Value, tokenValidationParams, out var validatedToken);
 
             RefreshToken refreshToken = SetupRefreshTokenValidatorTests.SetupRefreshToken(validatedToken, userWhoOwnsTheToken);
 
@@ -77,13 +77,13 @@ namespace LibHouse.UnitTests.Suite.Infrastructure.Authentication.Token.Validatio
 
             int tokenExpirationInSeconds = 1;
 
-            var tokenGenerator = SetupRefreshTokenValidatorTests.SetupTokenGenerator(userWhoOwnsTheToken, LibHouseContext, AuthenticationContext, tokenExpirationInSeconds);
+            var tokenGenerator = SetupRefreshTokenValidatorTests.SetupTokenGenerator(userWhoOwnsTheToken, AuthenticationContext, tokenExpirationInSeconds);
 
             TokenValidationParameters tokenValidationParams = SetupRefreshTokenValidatorTests.SetupTokenValidationParameters();
 
-            UserToken userToken = await tokenGenerator.GenerateUserTokenAsync(userWhoOwnsTheToken.Email);
+            AccessToken userToken = await tokenGenerator.GenerateAccessTokenAsync(userWhoOwnsTheToken.Email);
 
-            ClaimsPrincipal accessTokenClaims = _tokenHandler.ValidateToken(userToken.AccessToken, tokenValidationParams, out var validatedToken);
+            ClaimsPrincipal accessTokenClaims = _tokenHandler.ValidateToken(userToken.Value, tokenValidationParams, out var validatedToken);
 
             RefreshToken refreshToken = SetupRefreshTokenValidatorTests.SetupRefreshToken(validatedToken, userWhoOwnsTheToken, isUsed: true);
 
@@ -101,13 +101,13 @@ namespace LibHouse.UnitTests.Suite.Infrastructure.Authentication.Token.Validatio
 
             int tokenExpirationInSeconds = 1;
 
-            var tokenGenerator = SetupRefreshTokenValidatorTests.SetupTokenGenerator(userWhoOwnsTheToken, LibHouseContext, AuthenticationContext, tokenExpirationInSeconds);
+            var tokenGenerator = SetupRefreshTokenValidatorTests.SetupTokenGenerator(userWhoOwnsTheToken, AuthenticationContext, tokenExpirationInSeconds);
 
             TokenValidationParameters tokenValidationParams = SetupRefreshTokenValidatorTests.SetupTokenValidationParameters();
 
-            UserToken userToken = await tokenGenerator.GenerateUserTokenAsync(userWhoOwnsTheToken.Email);
+            AccessToken userToken = await tokenGenerator.GenerateAccessTokenAsync(userWhoOwnsTheToken.Email);
 
-            ClaimsPrincipal accessTokenClaims = _tokenHandler.ValidateToken(userToken.AccessToken, tokenValidationParams, out var validatedToken);
+            ClaimsPrincipal accessTokenClaims = _tokenHandler.ValidateToken(userToken.Value, tokenValidationParams, out var validatedToken);
 
             RefreshToken refreshToken = SetupRefreshTokenValidatorTests.SetupRefreshToken(validatedToken, userWhoOwnsTheToken, isRevoked: true);
 
@@ -125,13 +125,13 @@ namespace LibHouse.UnitTests.Suite.Infrastructure.Authentication.Token.Validatio
 
             int tokenExpirationInSeconds = 1;
 
-            var tokenGenerator = SetupRefreshTokenValidatorTests.SetupTokenGenerator(userWhoOwnsTheToken, LibHouseContext, AuthenticationContext, tokenExpirationInSeconds);
+            var tokenGenerator = SetupRefreshTokenValidatorTests.SetupTokenGenerator(userWhoOwnsTheToken, AuthenticationContext, tokenExpirationInSeconds);
 
             TokenValidationParameters tokenValidationParams = SetupRefreshTokenValidatorTests.SetupTokenValidationParameters();
 
-            UserToken userToken = await tokenGenerator.GenerateUserTokenAsync(userWhoOwnsTheToken.Email);
+            AccessToken userToken = await tokenGenerator.GenerateAccessTokenAsync(userWhoOwnsTheToken.Email);
 
-            ClaimsPrincipal accessTokenClaims = _tokenHandler.ValidateToken(userToken.AccessToken, tokenValidationParams, out var validatedToken);
+            ClaimsPrincipal accessTokenClaims = _tokenHandler.ValidateToken(userToken.Value, tokenValidationParams, out var validatedToken);
 
             RefreshToken refreshToken = SetupRefreshTokenValidatorTests.SetupRefreshToken(validatedToken, userWhoOwnsTheToken, jwtId: Guid.NewGuid().ToString());
 
@@ -149,13 +149,13 @@ namespace LibHouse.UnitTests.Suite.Infrastructure.Authentication.Token.Validatio
 
             int tokenExpirationInSeconds = 1;
 
-            var tokenGenerator = SetupRefreshTokenValidatorTests.SetupTokenGenerator(userWhoOwnsTheToken, LibHouseContext, AuthenticationContext, tokenExpirationInSeconds);
+            var tokenGenerator = SetupRefreshTokenValidatorTests.SetupTokenGenerator(userWhoOwnsTheToken, AuthenticationContext, tokenExpirationInSeconds);
 
             TokenValidationParameters tokenValidationParams = SetupRefreshTokenValidatorTests.SetupTokenValidationParameters();
 
-            UserToken userToken = await tokenGenerator.GenerateUserTokenAsync(userWhoOwnsTheToken.Email);
+            AccessToken userToken = await tokenGenerator.GenerateAccessTokenAsync(userWhoOwnsTheToken.Email);
 
-            ClaimsPrincipal accessTokenClaims = _tokenHandler.ValidateToken(userToken.AccessToken, tokenValidationParams, out var validatedToken);
+            ClaimsPrincipal accessTokenClaims = _tokenHandler.ValidateToken(userToken.Value, tokenValidationParams, out var validatedToken);
 
             DateTime refreshTokenCreatedAt = DateTime.UtcNow.AddDays(-30);
 

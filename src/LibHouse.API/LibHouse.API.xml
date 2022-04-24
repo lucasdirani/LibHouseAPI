@@ -134,6 +134,56 @@
             A confirmação da senha do usuário cadastrado.
             </summary>
         </member>
+        <member name="T:LibHouse.API.V1.ViewModels.Users.UserAuthenticatedViewModel">
+            <summary>
+            Representa os dados de um usuário autenticado
+            </summary>
+        </member>
+        <member name="P:LibHouse.API.V1.ViewModels.Users.UserAuthenticatedViewModel.Id">
+            <summary>
+            O identificador único do usuário
+            </summary>
+        </member>
+        <member name="P:LibHouse.API.V1.ViewModels.Users.UserAuthenticatedViewModel.FullName">
+            <summary>
+            O nome completo do usuário
+            </summary>
+        </member>
+        <member name="P:LibHouse.API.V1.ViewModels.Users.UserAuthenticatedViewModel.BirthDate">
+            <summary>
+            A data de nascimento do usuário
+            </summary>
+        </member>
+        <member name="P:LibHouse.API.V1.ViewModels.Users.UserAuthenticatedViewModel.Gender">
+            <summary>
+            O gênero do usuário
+            </summary>
+        </member>
+        <member name="P:LibHouse.API.V1.ViewModels.Users.UserAuthenticatedViewModel.Email">
+            <summary>
+            O email do usuário
+            </summary>
+        </member>
+        <member name="P:LibHouse.API.V1.ViewModels.Users.UserAuthenticatedViewModel.UserType">
+            <summary>
+            O tipo de cadastro do usuário
+            </summary>
+        </member>
+        <member name="T:LibHouse.API.V1.ViewModels.Users.UserClaimViewModel">
+            <summary>
+            Representa uma claim pertencente ao usuário
+            </summary>
+        </member>
+        <member name="P:LibHouse.API.V1.ViewModels.Users.UserClaimViewModel.Value">
+            <summary>
+            O valor associado à claim
+            </summary>
+        </member>
+        <member name="P:LibHouse.API.V1.ViewModels.Users.UserClaimViewModel.Type">
+            <summary>
+            O nome de identificação da claim
+            </summary>
+        </member>
         <member name="T:LibHouse.API.V1.ViewModels.Users.UserRefreshTokenViewModel">
             <summary>
             Objeto que possui os dados necessários para obter um novo token de acesso
@@ -147,6 +197,41 @@
         <member name="P:LibHouse.API.V1.ViewModels.Users.UserRefreshTokenViewModel.RefreshToken">
             <summary>
             O refresh token que será utilizado para renovar o access token
+            </summary>
+        </member>
+        <member name="T:LibHouse.API.V1.ViewModels.Users.UserTokenViewModel">
+            <summary>
+            Representa os dados de autenticação de um usuário
+            </summary>
+        </member>
+        <member name="P:LibHouse.API.V1.ViewModels.Users.UserTokenViewModel.User">
+            <summary>
+            Os dados essenciais de cadastro do usuário (nome completo, tipo de usuário, etc.)
+            </summary>
+        </member>
+        <member name="P:LibHouse.API.V1.ViewModels.Users.UserTokenViewModel.AccessToken">
+            <summary>
+            O token de acesso atrelado ao usuário
+            </summary>
+        </member>
+        <member name="P:LibHouse.API.V1.ViewModels.Users.UserTokenViewModel.ExpiresInAccessToken">
+            <summary>
+            A data e hora de expiração do token de acesso
+            </summary>
+        </member>
+        <member name="P:LibHouse.API.V1.ViewModels.Users.UserTokenViewModel.RefreshToken">
+            <summary>
+            O token de renovação atrelado ao token de acesso do usuário
+            </summary>
+        </member>
+        <member name="P:LibHouse.API.V1.ViewModels.Users.UserTokenViewModel.ExpiresInRefreshToken">
+            <summary>
+            A data e hora de expiração do refresh token
+            </summary>
+        </member>
+        <member name="P:LibHouse.API.V1.ViewModels.Users.UserTokenViewModel.Claims">
+            <summary>
+            A lista de claims pertencentes ao usuário
             </summary>
         </member>
     </members>

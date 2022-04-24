@@ -51,7 +51,7 @@
 						"method": "PATCH",
 						"header": [],
 						"url": {
-							"raw": "{{url}}/api/{{api_version}}/users/confirm-registration?confirmationToken=CfDJ8GuYNfMjWYNMixkEkDiEN32KnBpNGVJKUOR26G%2frbFq4FKi0u7Li4MThpJSF8ymE8JZeqYtcOON6a39C2OTk9aqFGc5puuz2xUgfLtah0JMlG%2brWkokPFsio%2fw1gt%2b1L2ZEKSGJtSeCm18%2bJ%2byiJc1RRPj2LvkI0rBTFcQGc%2fcaMgqIql%2f3owFLIpooCuJzTTzAGwrcAWbMnVTslFmRFlF6Vo%2bjKr4pnvk%2bKDMygC3DXwgrWIYNDpJZYQSyqVRsYOQ%3d%3d&userEmail={{api_username}}&userId=66544656-f1f6-4a6e-88b2-426701ce1eb5",
+							"raw": "{{url}}/api/{{api_version}}/users/confirm-registration?confirmationToken=CfDJ8GuYNfMjWYNMixkEkDiEN305XGWiWu355sJVTqX96xj7Zk3KPZ9VaRMZlUbszrNK%2bP3QzH3w1OVjy4V7eIR4ooYdaDX3UYh58sdML8UGvxcYk%2fRbp3wQpS1jCz%2fRL97dlMWx%2f0jibBUPkdC2is6gix1kCgg39kQxlTLLKD7g%2fWNkyi%2beuWMQoQzYPAFjAWHYIEVxl2fGqXo9i9OxpmrP5jAFVRiaPzLlQqFCl1tKKY%2f7LrMtGkPG4fShh8NMA7QwRg%3d%3d&userEmail={{api_username}}&userId=f8bd1ba1-f7f5-4e0f-9720-01cf7ba1d68b",
 							"host": [
 								"{{url}}"
 							],
@@ -64,7 +64,7 @@
 							"query": [
 								{
 									"key": "confirmationToken",
-									"value": "CfDJ8GuYNfMjWYNMixkEkDiEN32KnBpNGVJKUOR26G%2frbFq4FKi0u7Li4MThpJSF8ymE8JZeqYtcOON6a39C2OTk9aqFGc5puuz2xUgfLtah0JMlG%2brWkokPFsio%2fw1gt%2b1L2ZEKSGJtSeCm18%2bJ%2byiJc1RRPj2LvkI0rBTFcQGc%2fcaMgqIql%2f3owFLIpooCuJzTTzAGwrcAWbMnVTslFmRFlF6Vo%2bjKr4pnvk%2bKDMygC3DXwgrWIYNDpJZYQSyqVRsYOQ%3d%3d",
+									"value": "CfDJ8GuYNfMjWYNMixkEkDiEN305XGWiWu355sJVTqX96xj7Zk3KPZ9VaRMZlUbszrNK%2bP3QzH3w1OVjy4V7eIR4ooYdaDX3UYh58sdML8UGvxcYk%2fRbp3wQpS1jCz%2fRL97dlMWx%2f0jibBUPkdC2is6gix1kCgg39kQxlTLLKD7g%2fWNkyi%2beuWMQoQzYPAFjAWHYIEVxl2fGqXo9i9OxpmrP5jAFVRiaPzLlQqFCl1tKKY%2f7LrMtGkPG4fShh8NMA7QwRg%3d%3d",
 									"description": "O token de confirmação do e-mail enviado para o usuário"
 								},
 								{
@@ -74,7 +74,7 @@
 								},
 								{
 									"key": "userId",
-									"value": "66544656-f1f6-4a6e-88b2-426701ce1eb5",
+									"value": "f8bd1ba1-f7f5-4e0f-9720-01cf7ba1d68b",
 									"description": "O identificador único do usuário"
 								}
 							]
@@ -177,7 +177,7 @@
 			"script": {
 				"type": "text/javascript",
 				"exec": [
-					"if (pm.variables.get(\"execute_pre_login_script\") == true) {",
+					"if (pm.variables.get(\"execute_pre_login_script\") === \"true\") {",
 					"    const tokenUrl = `${pm.variables.get(\"url\")}/api/${pm.variables.get(\"api_version\")}/users/login`;",
 					"",
 					"    const clientUserName = pm.variables.get(\"api_username\");",

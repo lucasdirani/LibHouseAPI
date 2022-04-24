@@ -9,17 +9,13 @@ using LibHouse.Business.Monads;
 using LibHouse.Business.Notifiers;
 using LibHouse.Infrastructure.Authentication.Context;
 using LibHouse.Infrastructure.Authentication.Login.Interfaces;
+using LibHouse.Infrastructure.Authentication.Login.Models;
 using LibHouse.Infrastructure.Authentication.Register.SignIn;
 using LibHouse.Infrastructure.Authentication.Register.SignUp;
-using LibHouse.Infrastructure.Authentication.Token.Generators;
 using LibHouse.Infrastructure.Authentication.Token.Models;
-using LibHouse.Infrastructure.Authentication.Token.Validations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace LibHouse.API.V1.Controllers
@@ -29,36 +25,25 @@ namespace LibHouse.API.V1.Controllers
     public class UsersController : MainController
     {
         private readonly IUserSignIn _userSignIn;
-        private readonly ITokenGenerator _tokenGenerator;
-        private readonly IRefreshTokenValidator _refreshTokenValidator;
         private readonly IUserSignUp _userSignUp;
         private readonly IUserRegistrationService _userRegistrationService;
         private readonly AuthenticationContext _authenticationContext;
-        private readonly TokenValidationParameters _tokenValidationParameters;
-        private readonly JwtSecurityTokenHandler _jwtSecurityTokenHandler;
 
         public UsersController(
             INotifier notifier, 
             ILoggedUser loggedUser, 
             IKLogger logger,
             IMapper mapper,
-            ITokenGenerator tokenGenerator,
-            IRefreshTokenValidator refreshTokenValidator,
             IUserSignIn userSignIn,
             IUserSignUp userSignUp,
             IUserRegistrationService userRegistrationService,
-            AuthenticationContext authenticationContext,
-            TokenValidationParameters tokenValidationParameters) 
+            AuthenticationContext authenticationContext) 
             : base(notifier, loggedUser, logger, mapper)
         {
-            _tokenGenerator = tokenGenerator;
-            _refreshTokenValidator = refreshTokenValidator;
             _userSignIn = userSignIn;
             _userSignUp = userSignUp;
             _userRegistrationService = userRegistrationService;
             _authenticationContext = authenticationContext;
-            _tokenValidationParameters = tokenValidationParameters;
-            _jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
         }
 
         /// <summary>
@@ -159,14 +144,14 @@ namespace LibHouse.API.V1.Controllers
         /// <response code="500">Erro ao processar a requisição no servidor.</response>
         [AllowAnonymous]
         [HttpPost("login", Name = "User Login")]
-        public async Task<ActionResult<UserToken>> LoginUserAsync(LoginUserViewModel loginUser)
+        public async Task<ActionResult<UserTokenViewModel>> LoginUserAsync(LoginUserViewModel loginUser)
         {
             if (ModelState.NotValid())
             {
                 return CustomResponseFor(ModelState);
             }
 
-            Result userSignIn = await _userSignIn.SignInUserAsync(loginUser.Email, loginUser.Password);
+            Result<AuthenticatedUser> userSignIn = await _userSignIn.SignInUserAsync(loginUser.Email, loginUser.Password);
 
             if (userSignIn.Failure)
             {
@@ -177,7 +162,7 @@ namespace LibHouse.API.V1.Controllers
                 return CustomResponseForPostEndpoint();
             }
 
-            UserToken userToken = await _tokenGenerator.GenerateUserTokenAsync(loginUser.Email);
+            UserTokenViewModel userToken = Mapper.Map<UserTokenViewModel>(userSignIn.Value);
 
             Logger.Log(LogLevel.Information, $"Usuário {loginUser.Email} realizou login com sucesso: {DateTime.UtcNow}");
 
@@ -194,7 +179,8 @@ namespace LibHouse.API.V1.Controllers
         /// <response code="500">Erro ao processar a requisição no servidor.</response>
         [Authorize("User")]
         [HttpPost("refresh-token", Name = "Refresh Token")]
-        public async Task<ActionResult<UserToken>> RefreshTokenAsync(UserRefreshTokenViewModel userRefreshToken)
+        public async Task<ActionResult<UserTokenViewModel>> RefreshTokenAsync(
+            UserRefreshTokenViewModel userRefreshToken)
         {
             if (ModelState.NotValid())
             {
@@ -210,15 +196,17 @@ namespace LibHouse.API.V1.Controllers
                 return CustomResponseForPostEndpoint();
             }
 
-            ClaimsPrincipal accessTokenClaims = _jwtSecurityTokenHandler.ValidateToken(userRefreshToken.AccessToken, _tokenValidationParameters, out var accessToken);
+            AccessToken accessToken = new(userRefreshToken.AccessToken);
 
-            Result refreshTokenCanBeUsed = _refreshTokenValidator.CheckIfRefreshTokenCanBeUsedWithAccessToken(refreshToken, accessToken, accessTokenClaims);
+            string userEmail = LoggedUser.GetUserEmail();
 
-            if (refreshTokenCanBeUsed.Failure)
+            Result<AuthenticatedUser> userSignIn = await _userSignIn.SignInUserAsync(userEmail, accessToken, refreshToken);
+
+            if (userSignIn.Failure)
             {
-                Logger.Log(LogLevel.Error, refreshTokenCanBeUsed.Error);
+                Logger.Log(LogLevel.Error, userSignIn.Error);
 
-                NotifyError("Refresh Token não pode ser utilizado", refreshTokenCanBeUsed.Error);
+                NotifyError("Refresh Token não pode ser utilizado", userSignIn.Error);
 
                 return CustomResponseForPostEndpoint();
             }
@@ -227,11 +215,9 @@ namespace LibHouse.API.V1.Controllers
 
             await _authenticationContext.SaveChangesAsync();
 
-            string userEmail = LoggedUser.GetUserEmail();
-
-            UserToken userToken = await _tokenGenerator.GenerateUserTokenAsync(userEmail);
-
             Logger.Log(LogLevel.Information, $"Usuário {userEmail} renovou o seu login com sucesso: {DateTime.UtcNow}");
+
+            UserTokenViewModel userToken = Mapper.Map<UserTokenViewModel>(userSignIn.Value);
 
             return Ok(userToken);
         }
