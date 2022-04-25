@@ -1,4 +1,4 @@
-﻿namespace LibHouse.Infrastructure.Shared.Settings
+﻿namespace LibHouse.API.Settings.Website
 {
     public class LibHouseWebsiteSettings
     {

@@ -25,7 +25,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LibHouse.Business\LibHouse.Business.csproj" />
-    <ProjectReference Include="..\LibHouse.Infrastructure.Email\LibHouse.Infrastructure.Email.csproj" />
   </ItemGroup>
 
 </Project>

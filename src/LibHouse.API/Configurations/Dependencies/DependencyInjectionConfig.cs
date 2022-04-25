@@ -1,5 +1,6 @@
 ﻿using LibHouse.API.Authentication;
 using LibHouse.API.Configurations.Swagger;
+using LibHouse.API.Settings.Website;
 using LibHouse.Business.Entities.Shared;
 using LibHouse.Business.Entities.Users;
 using LibHouse.Business.Notifiers;
@@ -9,7 +10,6 @@ using LibHouse.Data.Context;
 using LibHouse.Data.Repositories.Users;
 using LibHouse.Data.Transactions;
 using LibHouse.Infrastructure.Authentication.Login.Interfaces;
-using LibHouse.Infrastructure.Shared.Settings;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;

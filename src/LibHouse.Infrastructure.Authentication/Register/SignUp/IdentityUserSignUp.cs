@@ -2,14 +2,10 @@
 using LibHouse.Business.Monads;
 using LibHouse.Infrastructure.Authentication.Extensions.Identity;
 using LibHouse.Infrastructure.Authentication.Extensions.Users;
-using LibHouse.Infrastructure.Authentication.Register.Messages;
+using LibHouse.Infrastructure.Authentication.Register.Senders;
 using LibHouse.Infrastructure.Authentication.Roles;
 using LibHouse.Infrastructure.Authentication.Token.Models;
-using LibHouse.Infrastructure.Email.Models;
-using LibHouse.Infrastructure.Email.Services;
-using LibHouse.Infrastructure.Shared.Settings;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Options;
 using System.Threading.Tasks;
 
 namespace LibHouse.Infrastructure.Authentication.Register.SignUp
@@ -17,17 +13,14 @@ namespace LibHouse.Infrastructure.Authentication.Register.SignUp
     public class IdentityUserSignUp : IUserSignUp
     {
         private readonly UserManager<IdentityUser> _userManager;
-        private readonly LibHouseWebsiteSettings _libHouseWebsiteSettings;
-        private readonly IMailService _mailService;
+        private readonly ISignUpConfirmationTokenSender _signUpConfirmationTokenSender;
 
         public IdentityUserSignUp(
             UserManager<IdentityUser> userManager,
-            IOptions<LibHouseWebsiteSettings> libHouseWebsiteSettings,
-            IMailService mailService)
+            ISignUpConfirmationTokenSender signUpConfirmationTokenSender)
         {
             _userManager = userManager;
-            _mailService = mailService;
-            _libHouseWebsiteSettings = libHouseWebsiteSettings.Value;
+            _signUpConfirmationTokenSender = signUpConfirmationTokenSender;
         }
 
         public async Task<Result> AcceptUserConfirmationTokenAsync(
@@ -52,13 +45,7 @@ namespace LibHouse.Infrastructure.Authentication.Register.SignUp
             SignUpConfirmationToken confirmationToken, 
             User user)
         {
-            string confirmEmailAddress = _libHouseWebsiteSettings.ConfirmEmailAddress;
-
-            string confirmationTokenMessage = UserRegistrationMessageBuilder.BuildMessageForSendConfirmationTokenToUser(user, confirmationToken, confirmEmailAddress);
-
-            var mailRequest = new MailRequest(toEmail: user.Email, subject: "Confirme o seu e-mail", body: confirmationTokenMessage);
-
-            bool confirmationTokenSent = await _mailService.SendEmailAsync(mailRequest);
+            bool confirmationTokenSent = await _signUpConfirmationTokenSender.SendSignUpConfirmationTokenToUserAsync(confirmationToken, user);
 
             return confirmationTokenSent ? Result.Success() : Result.Fail($"Falha ao enviar o token de confirmação para {user.Email}");
         }
