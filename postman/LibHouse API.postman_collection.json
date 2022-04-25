@@ -50,8 +50,17 @@
 						},
 						"method": "PATCH",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"confirmationToken\": \"CfDJ8BPykeuH+DRCpJAYVK0BLBQRLOkNtbNBH3dMYC4ASI75ZIbWUM+4YHfepuoLdJDyNiyBBzn/cuZ0toAsQzZExH0Km8TOUaVeisjjISsG9oe939vyD9twoudkqnXfD16kfQpLBspNTdq4Jh7ce7fwIgQ/3sIZqEagjfW29rCu5jGiULoWhnbsgksM+ypPjNxTysCMbqQ20yrSCReKty3NlJgLehN7+d8CukLWNf23ksHRqcNoG3kPZXRlyG1VYBDCrA==\",\r\n    \"userEmail\": \"{{api_username}}\",\r\n    \"userId\": \"18f3c117-9fda-434d-ac62-2ff95722286d\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "{{url}}/api/{{api_version}}/users/confirm-registration?confirmationToken=CfDJ8GuYNfMjWYNMixkEkDiEN305XGWiWu355sJVTqX96xj7Zk3KPZ9VaRMZlUbszrNK%2bP3QzH3w1OVjy4V7eIR4ooYdaDX3UYh58sdML8UGvxcYk%2fRbp3wQpS1jCz%2fRL97dlMWx%2f0jibBUPkdC2is6gix1kCgg39kQxlTLLKD7g%2fWNkyi%2beuWMQoQzYPAFjAWHYIEVxl2fGqXo9i9OxpmrP5jAFVRiaPzLlQqFCl1tKKY%2f7LrMtGkPG4fShh8NMA7QwRg%3d%3d&userEmail={{api_username}}&userId=f8bd1ba1-f7f5-4e0f-9720-01cf7ba1d68b",
+							"raw": "{{url}}/api/{{api_version}}/users/confirm-registration",
 							"host": [
 								"{{url}}"
 							],
@@ -63,19 +72,19 @@
 							],
 							"query": [
 								{
-									"key": "confirmationToken",
-									"value": "CfDJ8GuYNfMjWYNMixkEkDiEN305XGWiWu355sJVTqX96xj7Zk3KPZ9VaRMZlUbszrNK%2bP3QzH3w1OVjy4V7eIR4ooYdaDX3UYh58sdML8UGvxcYk%2fRbp3wQpS1jCz%2fRL97dlMWx%2f0jibBUPkdC2is6gix1kCgg39kQxlTLLKD7g%2fWNkyi%2beuWMQoQzYPAFjAWHYIEVxl2fGqXo9i9OxpmrP5jAFVRiaPzLlQqFCl1tKKY%2f7LrMtGkPG4fShh8NMA7QwRg%3d%3d",
-									"description": "O token de confirmação do e-mail enviado para o usuário"
+									"key": "",
+									"value": "",
+									"disabled": true
 								},
 								{
-									"key": "userEmail",
-									"value": "{{api_username}}",
-									"description": "O e-mail utilizado pelo usuário para se registrar na plataforma"
+									"key": "",
+									"value": "",
+									"disabled": true
 								},
 								{
-									"key": "userId",
-									"value": "f8bd1ba1-f7f5-4e0f-9720-01cf7ba1d68b",
-									"description": "O identificador único do usuário"
+									"key": "",
+									"value": "",
+									"disabled": true
 								}
 							]
 						},
