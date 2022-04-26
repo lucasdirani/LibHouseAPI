@@ -8,5 +8,6 @@ namespace LibHouse.Business.Entities.Users
         Task<User> GetUserByEmailAsync(string email);
         Task<bool> CheckIfUserCpfIsNotRegisteredAsync(Cpf cpf);
         Task<bool> CheckIfUserEmailIsNotRegisteredAsync(string email);
+        Task<bool> CheckIfExistingAccountAsync(Cpf cpf);
     }
 }

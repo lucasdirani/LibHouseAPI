@@ -221,5 +221,31 @@ namespace LibHouse.API.V1.Controllers
 
             return Ok(userToken);
         }
+
+        /// <summary>
+        /// Verifica se existe uma conta com cpf cadastrado para seguir com a redefinição de senha.
+        /// </summary>
+        /// <param name="confirmAccount">Objeto que possui os dados necessários para confirmar se a conta existe para trocar a senha.</param>
+        /// <returns>Em caso de sucesso, retorna um objeto com os dados do usuário e do novo token. Em caso de erro, retorna uma lista de notificações.</returns>
+        /// <response code="200">O cpf foi identificado com sucesso.</response>
+        /// <response code="400">Os dados enviados são inválidos ou houve uma falha na verificação do cpf.</response>
+        /// <response code="500">Erro ao processar a requisição no servidor.</response>
+        [AllowAnonymous]
+        [HttpPost("confirmation-existing-account", Name = "Confirmation Account")]
+        public async Task<IActionResult> ConfirmationAccountAsync([FromBody] ConfirmExistingAccount confirmAccount)
+        {
+            if (ModelState.NotValid())
+            {
+                return CustomResponseFor(ModelState);
+            }
+
+            Result existAccount = await _userRegistrationService.ConfirmationExistingAccountAsync(confirmAccount.Cpf);
+            if (existAccount.Failure)
+            {
+                return CustomResponseForPostEndpoint();
+            }
+
+            return Ok();
+        }
     }
 }

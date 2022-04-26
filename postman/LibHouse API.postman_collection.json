@@ -1,8 +1,7 @@
 {
 	"info": {
-		"_postman_id": "7cf1eb30-8dfe-4c48-b6a1-9e3839fb3a29",
+		"_postman_id": "e7506d0b-cabb-475a-abc7-85324fc4c81d",
 		"name": "LibHouse API",
-		"description": "Documentação dos endpoints da API construída para o front-end Angular do LibHouse.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -11,6 +10,17 @@
 			"item": [
 				{
 					"name": "New Account",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"auth": {
 							"type": "noauth"
@@ -19,7 +29,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Lucas\",\r\n    \"lastName\": \"Dirani\",\r\n    \"birthDate\": \"1998-08-12\",\r\n    \"gender\": 0,\r\n    \"phone\": \"11975257584\",\r\n    \"email\": \"{{api_username}}\",\r\n    \"cpf\": \"09283233077\",\r\n    \"userType\": 1,\r\n    \"password\": \"{{api_user_password}}\",\r\n    \"confirmPassword\": \"{{api_user_password}}\"\r\n}",
+							"raw": "{\r\n    \"Name\": \"Matheus\",\r\n    \"LastName\": \"Lopes\",\r\n    \"BirthDate\": \"1998-08-12\",\r\n    \"Gender\": 0,\r\n    \"Phone\": \"11940176230\",\r\n    \"Email\": \"matheuslopesdejesus@hotmail.com\",\r\n    \"CPF\": \"43786658838\",\r\n    \"UserType\": 1,\r\n    \"Password\": \"{{api_user_password}}\",\r\n    \"ConfirmPassword\": \"{{api_user_password}}\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -50,17 +60,8 @@
 						},
 						"method": "PATCH",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"confirmationToken\": \"CfDJ8BPykeuH+DRCpJAYVK0BLBQRLOkNtbNBH3dMYC4ASI75ZIbWUM+4YHfepuoLdJDyNiyBBzn/cuZ0toAsQzZExH0Km8TOUaVeisjjISsG9oe939vyD9twoudkqnXfD16kfQpLBspNTdq4Jh7ce7fwIgQ/3sIZqEagjfW29rCu5jGiULoWhnbsgksM+ypPjNxTysCMbqQ20yrSCReKty3NlJgLehN7+d8CukLWNf23ksHRqcNoG3kPZXRlyG1VYBDCrA==\",\r\n    \"userEmail\": \"{{api_username}}\",\r\n    \"userId\": \"18f3c117-9fda-434d-ac62-2ff95722286d\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
 						"url": {
-							"raw": "{{url}}/api/{{api_version}}/users/confirm-registration",
+							"raw": "{{url}}/api/{{api_version}}/users/confirm-registration?confirmationToken=CfDJ8GuYNfMjWYNMixkEkDiEN32KnBpNGVJKUOR26G%2frbFq4FKi0u7Li4MThpJSF8ymE8JZeqYtcOON6a39C2OTk9aqFGc5puuz2xUgfLtah0JMlG%2brWkokPFsio%2fw1gt%2b1L2ZEKSGJtSeCm18%2bJ%2byiJc1RRPj2LvkI0rBTFcQGc%2fcaMgqIql%2f3owFLIpooCuJzTTzAGwrcAWbMnVTslFmRFlF6Vo%2bjKr4pnvk%2bKDMygC3DXwgrWIYNDpJZYQSyqVRsYOQ%3d%3d&userEmail={{api_username}}&userId=66544656-f1f6-4a6e-88b2-426701ce1eb5",
 							"host": [
 								"{{url}}"
 							],
@@ -72,19 +73,19 @@
 							],
 							"query": [
 								{
-									"key": "",
-									"value": "",
-									"disabled": true
+									"key": "confirmationToken",
+									"value": "CfDJ8GuYNfMjWYNMixkEkDiEN32KnBpNGVJKUOR26G%2frbFq4FKi0u7Li4MThpJSF8ymE8JZeqYtcOON6a39C2OTk9aqFGc5puuz2xUgfLtah0JMlG%2brWkokPFsio%2fw1gt%2b1L2ZEKSGJtSeCm18%2bJ%2byiJc1RRPj2LvkI0rBTFcQGc%2fcaMgqIql%2f3owFLIpooCuJzTTzAGwrcAWbMnVTslFmRFlF6Vo%2bjKr4pnvk%2bKDMygC3DXwgrWIYNDpJZYQSyqVRsYOQ%3d%3d",
+									"description": "O token de confirmação do e-mail enviado para o usuário"
 								},
 								{
-									"key": "",
-									"value": "",
-									"disabled": true
+									"key": "userEmail",
+									"value": "{{api_username}}",
+									"description": "O e-mail utilizado pelo usuário para se registrar na plataforma"
 								},
 								{
-									"key": "",
-									"value": "",
-									"disabled": true
+									"key": "userId",
+									"value": "66544656-f1f6-4a6e-88b2-426701ce1eb5",
+									"description": "O identificador único do usuário"
 								}
 							]
 						},
@@ -94,17 +95,6 @@
 				},
 				{
 					"name": "User Login",
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
 					"request": {
 						"auth": {
 							"type": "noauth"
@@ -165,6 +155,35 @@
 						"description": "Este endpoint renova o access token de um usuário que já está expirado.\n\nEm caso de sucesso, retorna um objeto com os dados do usuário e do novo token. Em caso de erro, retorna uma lista de notificações."
 					},
 					"response": []
+				},
+				{
+					"name": "ConfirmExistingAccount",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Cpf\":\"43786658838\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/{{api_version}}/users/confirmation-existing-account",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"{{api_version}}",
+								"users",
+								"confirmation-existing-account"
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"description": "Todas as requisições para a rota de usuários (/users) estão agrupadas nesta pasta. As principais operações incluem registrar, autenticar e consultar os dados de cadastro dos usuários da aplicação LibHouse."
@@ -186,34 +205,7 @@
 			"script": {
 				"type": "text/javascript",
 				"exec": [
-					"if (pm.variables.get(\"execute_pre_login_script\") === \"true\") {",
-					"    const tokenUrl = `${pm.variables.get(\"url\")}/api/${pm.variables.get(\"api_version\")}/users/login`;",
-					"",
-					"    const clientUserName = pm.variables.get(\"api_username\");",
-					"    const clientUserPassword = pm.variables.get(\"api_user_password\");",
-					"",
-					"    const getTokenRequest = {",
-					"        method: \"POST\",",
-					"        url: tokenUrl,",
-					"        header: {",
-					"            'Accept': 'application/json',",
-					"            'Content-Type': 'application/json'",
-					"        },",
-					"        body: {",
-					"            mode: 'raw',",
-					"            raw: JSON.stringify({\"email\": clientUserName, \"password\": clientUserPassword})",
-					"        }",
-					"    };",
-					"",
-					"    pm.sendRequest(getTokenRequest, (err, response) => {",
-					"        const jsonResponse = response.json();",
-					"        const newAccessToken = jsonResponse.accessToken;",
-					"        const newRefreshToken = jsonResponse.refreshToken;",
-					"",
-					"        pm.variables.set('access_token', newAccessToken);",
-					"        pm.variables.set('refresh_token', newRefreshToken);",
-					"    });",
-					"}"
+					""
 				]
 			}
 		},
@@ -225,6 +217,36 @@
 					""
 				]
 			}
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "https://localhost:5001"
+		},
+		{
+			"key": "api_version",
+			"value": "v1"
+		},
+		{
+			"key": "access_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "refresh_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "api_username",
+			"value": "mah.dejesus@gmail.com",
+			"type": "string"
+		},
+		{
+			"key": "api_user_password",
+			"value": "Senha@123456",
+			"type": "string"
 		}
 	]
 }

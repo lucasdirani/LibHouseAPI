@@ -14,6 +14,16 @@ namespace LibHouse.Data.Repositories.Users
 
         }
 
+        public async Task<bool> CheckIfExistingAccountAsync(Cpf cpf)
+        {
+            bool accountExist = await _dbSet.AnyAsync(u => u.CPF.Value == cpf.Value);
+            bool accountActive = await _dbSet.AnyAsync(u => u.Active == true);
+
+            if (accountActive && accountExist) return true;
+
+            return false;
+        }
+
         public async Task<bool> CheckIfUserCpfIsNotRegisteredAsync(Cpf cpf)
         {
             return !await _dbSet.AnyAsync(u => u.CPF.Value == cpf.Value);
