@@ -42,7 +42,7 @@ namespace LibHouse.API.Senders.Tokens
         {
             return $"{user.Name}, seja bem-vindo(a) ao LibHouse. Se você solicitou o cadastro " +
                 $"na plataforma, confirme o seu e-mail clicando neste link: {confirmEmailAddress}/" +
-                $"{user.Email}/{user.Id}/{confirmationToken.Value}";
+                $"{user.Email}/{user.Id}/{confirmationToken.EncodedValue}";
         }
     }
 }
