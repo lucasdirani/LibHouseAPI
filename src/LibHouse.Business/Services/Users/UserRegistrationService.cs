@@ -34,6 +34,11 @@ namespace LibHouse.Business.Services.Users
                 Notify("Confirmar cadastro", "O usuário não foi encontrado.");
 
                 return Result.Fail("O usuário não foi encontrado.");
+            } 
+
+            if (user.IsActive)
+            {
+                return Result.Success();
             }
 
             user.Activate();
