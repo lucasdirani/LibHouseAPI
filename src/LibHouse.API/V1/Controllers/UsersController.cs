@@ -121,6 +121,8 @@ namespace LibHouse.API.V1.Controllers
 
             if (userConfirmed.Failure)
             {
+                NotifyError("Confirmação do cadastro do usuário", userConfirmed.Error);
+
                 return CustomResponseForPatchEndpoint(userConfirmed);
             }
 
