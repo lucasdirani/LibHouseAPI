@@ -73,6 +73,8 @@ namespace LibHouse.API.V1.Controllers
 
             if (userRegistration.Failure)
             {
+                Logger.Log(LogLevel.Error, $"Erro ao registrar o usuário: {userRegistration.Error}");
+
                 return CustomResponseForPostEndpoint();
             }
 
@@ -81,6 +83,8 @@ namespace LibHouse.API.V1.Controllers
             if (userSignUp.Failure)
             {
                 NotifyError("Registrar usuário", userSignUp.Error);
+
+                Logger.Log(LogLevel.Error, $"Erro ao registrar o usuário: {userSignUp.Error}");
 
                 return CustomResponseForPostEndpoint();
             }
@@ -92,6 +96,8 @@ namespace LibHouse.API.V1.Controllers
             if (sendConfirmationToken.Failure)
             {
                 NotifyError("Enviar token de confirmação", sendConfirmationToken.Error);
+
+                Logger.Log(LogLevel.Error, $"Erro ao enviar o token de confirmação de cadastro do usuário: {sendConfirmationToken.Error}");
 
                 return CustomResponseForPostEndpoint();
             }
