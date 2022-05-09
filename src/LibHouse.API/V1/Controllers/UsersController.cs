@@ -7,15 +7,14 @@ using LibHouse.API.V1.ViewModels.Users;
 using LibHouse.Business.Entities.Users;
 using LibHouse.Business.Monads;
 using LibHouse.Business.Notifiers;
-using LibHouse.Infrastructure.Authentication.Context;
 using LibHouse.Infrastructure.Authentication.Login.Interfaces;
 using LibHouse.Infrastructure.Authentication.Login.Models;
 using LibHouse.Infrastructure.Authentication.Login.Password;
 using LibHouse.Infrastructure.Authentication.Register.SignIn;
 using LibHouse.Infrastructure.Authentication.Register.SignUp;
 using LibHouse.Infrastructure.Authentication.Token.Models;
+using LibHouse.Infrastructure.Authentication.Token.Services.RefreshTokens;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
 
@@ -29,7 +28,7 @@ namespace LibHouse.API.V1.Controllers
         private readonly IUserSignUp _userSignUp;
         private readonly IUserPasswordReset _userPasswordReset;
         private readonly IUserRegistrationService _userRegistrationService;
-        private readonly AuthenticationContext _authenticationContext;
+        private readonly IRefreshTokenService _refreshTokenService;
 
         public UsersController(
             INotifier notifier, 
@@ -40,14 +39,14 @@ namespace LibHouse.API.V1.Controllers
             IUserSignUp userSignUp,
             IUserPasswordReset userPasswordReset,
             IUserRegistrationService userRegistrationService,
-            AuthenticationContext authenticationContext) 
+            IRefreshTokenService refreshTokenService) 
             : base(notifier, loggedUser, logger, mapper)
         {
             _userSignIn = userSignIn;
             _userSignUp = userSignUp;
             _userPasswordReset = userPasswordReset;
             _userRegistrationService = userRegistrationService;
-            _authenticationContext = authenticationContext;
+            _refreshTokenService = refreshTokenService;
         }
 
         /// <summary>
@@ -203,7 +202,7 @@ namespace LibHouse.API.V1.Controllers
                 return CustomResponseFor(ModelState);
             }
 
-            RefreshToken refreshToken = await _authenticationContext.RefreshTokens.FirstOrDefaultAsync(r => r.Token == userRefreshToken.RefreshToken);
+            RefreshToken refreshToken = await _refreshTokenService.GetRefreshTokenByValueAsync(userRefreshToken.RefreshToken);
 
             if (refreshToken is null)
             {
@@ -227,9 +226,7 @@ namespace LibHouse.API.V1.Controllers
                 return CustomResponseForPostEndpoint();
             }
 
-            refreshToken.MarkAsUsed();
-
-            await _authenticationContext.SaveChangesAsync();
+            await _refreshTokenService.MarkRefreshTokenAsUsedAsync(refreshToken);
 
             Logger.Log(LogLevel.Information, $"Usuário {userEmail} renovou o seu login com sucesso: {DateTime.UtcNow}");
 

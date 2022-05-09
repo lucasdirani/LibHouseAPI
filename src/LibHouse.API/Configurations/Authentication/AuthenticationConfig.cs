@@ -6,6 +6,7 @@ using LibHouse.Infrastructure.Authentication.Register.SignIn;
 using LibHouse.Infrastructure.Authentication.Register.SignUp;
 using LibHouse.Infrastructure.Authentication.Token.Generators.AccessTokens;
 using LibHouse.Infrastructure.Authentication.Token.Generators.RefreshTokens;
+using LibHouse.Infrastructure.Authentication.Token.Services.RefreshTokens;
 using LibHouse.Infrastructure.Authentication.Token.Settings;
 using LibHouse.Infrastructure.Authentication.Token.Validations.RefreshTokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -58,6 +59,8 @@ namespace LibHouse.API.Configurations.Authentication
             services.AddScoped<IAccessTokenGenerator, JwtAccessTokenGenerator>();
 
             services.AddSingleton<IRefreshTokenValidator, RefreshTokenValidator>();
+
+            services.AddScoped<IRefreshTokenService, IdentityRefreshTokenService>();
 
             services.AddScoped<ISignUpConfirmationTokenSender, SignUpConfirmationTokenEmailSender>();
 
