@@ -265,6 +265,8 @@ namespace LibHouse.API.V1.Controllers
             {
                 NotifyError("Solicitar redefinição de senha", requestPasswordReset.Error);
 
+                Logger.Log(LogLevel.Error, $"Falha ao criar o token de redefinição de senha para {user.Email}");
+
                 return CustomResponseForPatchEndpoint(requestPasswordReset);
             }
 
@@ -276,8 +278,12 @@ namespace LibHouse.API.V1.Controllers
             {
                 NotifyError("Enviar solicitação de redefinição de senha", sendPasswordResetToken.Error);
 
+                Logger.Log(LogLevel.Error, $"Falha ao enviar o token de redefinição de senha para {user.Email}");
+
                 return CustomResponseForPatchEndpoint(sendPasswordResetToken);
             }
+
+            Logger.Log(LogLevel.Information, $"Redefinição de senha solicitada para {user.Email}");
 
             return CustomResponseForPatchEndpoint(sendPasswordResetToken);
         }
