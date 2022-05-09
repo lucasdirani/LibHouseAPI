@@ -3,7 +3,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace LibHouse.API.V1.ViewModels.Users
 {
-    public class ConfirmExistingAccount
+    /// <summary>
+    /// Representa os dados necessários para que um usuário solicite a redefinição da sua senha
+    /// </summary>
+    public class RequestUserPasswordResetViewModel
     {
         /// <summary>
         /// O número de cpf do usuário cadastrado.

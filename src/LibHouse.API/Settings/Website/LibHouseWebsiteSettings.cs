@@ -4,5 +4,6 @@
     {
         public string Address { get; set; }
         public string ConfirmEmailAddress { get; set; }
+        public string RequestPasswordResetAddress { get; set; }
     }
 }

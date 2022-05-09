@@ -73,18 +73,20 @@ namespace LibHouse.Business.Services.Users
             return Result.Success();
         }
 
-        public async Task<Result> ConfirmationExistingAccountAsync(Cpf cpf)
+        public async Task<Result<User>> CheckUserAccountExistence(Cpf cpf)
         {
-            bool existUser = await _unitOfWork.UserRepository.CheckIfExistingAccountAsync(cpf);
+            bool userAccountNotExists = await _unitOfWork.UserRepository.CheckIfUserCpfIsNotRegisteredAsync(cpf);
 
-            if (!existUser)
+            if (userAccountNotExists)
             {
-                Notify("Resetar Senha", "O usuário não foi encontrado.");
+                Notify("Conta do usuário", "O usuário não foi encontrado.");
 
-                return Result.Fail("O usuário não foi encontrado.");
+                return Result.Fail<User>("O usuário não foi encontrado.");
             }
 
-            return Result.Success();
+            User user = await _unitOfWork.UserRepository.FirstAsync(u => u.CPF.Value == cpf.Value && u.Active);
+
+            return Result.Success(user);
         }
     }
 }

@@ -29,7 +29,7 @@ namespace LibHouse.API.Configurations.Authentication
               .AddDefaultTokenProviders()
               .AddTokenProvider<EmailConfirmationTokenProvider<IdentityUser>>("EmailConfirmation");
 
-            services.Configure<DataProtectionTokenProviderOptions>(opt => opt.TokenLifespan = TimeSpan.FromHours(2));
+            services.Configure<DataProtectionTokenProviderOptions>(opt => opt.TokenLifespan = TimeSpan.FromHours(1));
 
             services.Configure<EmailConfirmationTokenProviderOptions>(opt => opt.TokenLifespan = TimeSpan.FromDays(2));
 

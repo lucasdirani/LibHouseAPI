@@ -8,6 +8,6 @@ namespace LibHouse.Business.Entities.Users
     {
         Task<Result> RegisterUserAsync(User user);
         Task<Result> ConfirmUserRegistrationAsync(Guid userId);
-        Task<Result> ConfirmationExistingAccountAsync(Cpf cpf);
+        Task<Result<User>> CheckUserAccountExistence(Cpf cpf);
     }
 }

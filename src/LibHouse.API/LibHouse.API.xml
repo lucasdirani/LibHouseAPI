@@ -44,20 +44,15 @@
             <response code="400">Os dados enviados são inválidos ou houve uma falha na validação do refresh token.</response>
             <response code="500">Erro ao processar a requisição no servidor.</response>
         </member>
-        <member name="M:LibHouse.API.V1.Controllers.UsersController.ConfirmationAccountAsync(LibHouse.API.V1.ViewModels.Users.ConfirmExistingAccount)">
+        <member name="M:LibHouse.API.V1.Controllers.UsersController.RequestPasswordResetAsync(LibHouse.API.V1.ViewModels.Users.RequestUserPasswordResetViewModel)">
             <summary>
-            Verifica se existe uma conta com cpf cadastrado para seguir com a redefinição de senha.
+            Solicita a redefinição de senha para um usuário.
             </summary>
-            <param name="confirmAccount">Objeto que possui os dados necessários para confirmar se a conta existe para trocar a senha.</param>
-            <returns>Em caso de sucesso, retorna um objeto com os dados do usuário e do novo token. Em caso de erro, retorna uma lista de notificações.</returns>
-            <response code="200">O cpf foi identificado com sucesso.</response>
-            <response code="400">Os dados enviados são inválidos ou houve uma falha na verificação do cpf.</response>
+            <param name="requestUserPasswordReset">Objeto que possui os dados necessários para solicitar a redefinição de senha do usuário.</param>
+            <returns>Em caso de sucesso, retorna um objeto vazio. Em caso de erro, retorna uma lista de notificações.</returns>
+            <response code="204">A solicitação de redefinição de senha foi confirmada com sucesso.</response>
+            <response code="400">Os dados enviados são inválidos ou houve uma falha na geração do token de redefinição de senha.</response>
             <response code="500">Erro ao processar a requisição no servidor.</response>
-        </member>
-        <member name="P:LibHouse.API.V1.ViewModels.Users.ConfirmExistingAccount.Cpf">
-            <summary>
-            O número de cpf do usuário cadastrado.
-            </summary>
         </member>
         <member name="T:LibHouse.API.V1.ViewModels.Users.ConfirmUserRegistrationViewModel">
             <summary>
@@ -147,6 +142,16 @@
         <member name="P:LibHouse.API.V1.ViewModels.Users.RegisterUserViewModel.ConfirmPassword">
             <summary>
             A confirmação da senha do usuário cadastrado.
+            </summary>
+        </member>
+        <member name="T:LibHouse.API.V1.ViewModels.Users.RequestUserPasswordResetViewModel">
+            <summary>
+            Representa os dados necessários para que um usuário solicite a redefinição da sua senha
+            </summary>
+        </member>
+        <member name="P:LibHouse.API.V1.ViewModels.Users.RequestUserPasswordResetViewModel.Cpf">
+            <summary>
+            O número de cpf do usuário cadastrado.
             </summary>
         </member>
         <member name="T:LibHouse.API.V1.ViewModels.Users.UserAuthenticatedViewModel">

@@ -10,6 +10,7 @@ using LibHouse.Business.Notifiers;
 using LibHouse.Infrastructure.Authentication.Context;
 using LibHouse.Infrastructure.Authentication.Login.Interfaces;
 using LibHouse.Infrastructure.Authentication.Login.Models;
+using LibHouse.Infrastructure.Authentication.Login.Password;
 using LibHouse.Infrastructure.Authentication.Register.SignIn;
 using LibHouse.Infrastructure.Authentication.Register.SignUp;
 using LibHouse.Infrastructure.Authentication.Token.Models;
@@ -26,6 +27,7 @@ namespace LibHouse.API.V1.Controllers
     {
         private readonly IUserSignIn _userSignIn;
         private readonly IUserSignUp _userSignUp;
+        private readonly IUserPasswordReset _userPasswordReset;
         private readonly IUserRegistrationService _userRegistrationService;
         private readonly AuthenticationContext _authenticationContext;
 
@@ -36,12 +38,14 @@ namespace LibHouse.API.V1.Controllers
             IMapper mapper,
             IUserSignIn userSignIn,
             IUserSignUp userSignUp,
+            IUserPasswordReset userPasswordReset,
             IUserRegistrationService userRegistrationService,
             AuthenticationContext authenticationContext) 
             : base(notifier, loggedUser, logger, mapper)
         {
             _userSignIn = userSignIn;
             _userSignUp = userSignUp;
+            _userPasswordReset = userPasswordReset;
             _userRegistrationService = userRegistrationService;
             _authenticationContext = authenticationContext;
         }
@@ -223,29 +227,57 @@ namespace LibHouse.API.V1.Controllers
         }
 
         /// <summary>
-        /// Verifica se existe uma conta com cpf cadastrado para seguir com a redefinição de senha.
+        /// Solicita a redefinição de senha para um usuário.
         /// </summary>
-        /// <param name="confirmAccount">Objeto que possui os dados necessários para confirmar se a conta existe para trocar a senha.</param>
-        /// <returns>Em caso de sucesso, retorna um objeto com os dados do usuário e do novo token. Em caso de erro, retorna uma lista de notificações.</returns>
-        /// <response code="200">O cpf foi identificado com sucesso.</response>
-        /// <response code="400">Os dados enviados são inválidos ou houve uma falha na verificação do cpf.</response>
+        /// <param name="requestUserPasswordReset">Objeto que possui os dados necessários para solicitar a redefinição de senha do usuário.</param>
+        /// <returns>Em caso de sucesso, retorna um objeto vazio. Em caso de erro, retorna uma lista de notificações.</returns>
+        /// <response code="204">A solicitação de redefinição de senha foi confirmada com sucesso.</response>
+        /// <response code="400">Os dados enviados são inválidos ou houve uma falha na geração do token de redefinição de senha.</response>
         /// <response code="500">Erro ao processar a requisição no servidor.</response>
         [AllowAnonymous]
-        [HttpPost("confirmation-existing-account", Name = "Confirmation Account")]
-        public async Task<IActionResult> ConfirmationAccountAsync([FromBody] ConfirmExistingAccount confirmAccount)
+        [HttpPatch("request-password-reset", Name = "Request Password Reset")]
+        public async Task<IActionResult> RequestPasswordResetAsync(
+            [FromBody] RequestUserPasswordResetViewModel requestUserPasswordReset)
         {
             if (ModelState.NotValid())
             {
                 return CustomResponseFor(ModelState);
             }
 
-            Result existAccount = await _userRegistrationService.ConfirmationExistingAccountAsync(confirmAccount.Cpf);
-            if (existAccount.Failure)
+            Cpf userCpf = Cpf.CreateFromDocument(requestUserPasswordReset.Cpf);
+
+            Result<User> userAccountExistence = await _userRegistrationService.CheckUserAccountExistence(userCpf);
+
+            if (userAccountExistence.Failure)
             {
-                return CustomResponseForPostEndpoint();
+                NotifyError("Conta do usuário", userAccountExistence.Error);
+
+                return CustomResponseForPatchEndpoint(userAccountExistence);
             }
 
-            return Ok();
+            User user = userAccountExistence.Value;
+
+            Result<PasswordResetToken> requestPasswordReset = await _userPasswordReset.RequestPasswordResetAsync(user.Email);
+
+            if (requestPasswordReset.Failure)
+            {
+                NotifyError("Solicitar redefinição de senha", requestPasswordReset.Error);
+
+                return CustomResponseForPatchEndpoint(requestPasswordReset);
+            }
+
+            PasswordResetToken passwordResetToken = requestPasswordReset.Value;
+
+            Result sendPasswordResetToken = await _userPasswordReset.SendPasswordResetTokenToUserAsync(passwordResetToken, user);
+
+            if (sendPasswordResetToken.Failure)
+            {
+                NotifyError("Enviar solicitação de redefinição de senha", sendPasswordResetToken.Error);
+
+                return CustomResponseForPatchEndpoint(sendPasswordResetToken);
+            }
+
+            return CustomResponseForPatchEndpoint(sendPasswordResetToken);
         }
     }
 }

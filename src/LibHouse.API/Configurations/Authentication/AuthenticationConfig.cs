@@ -1,4 +1,6 @@
 ﻿using LibHouse.API.Senders.Tokens;
+using LibHouse.Infrastructure.Authentication.Login.Password;
+using LibHouse.Infrastructure.Authentication.Login.Password.Senders;
 using LibHouse.Infrastructure.Authentication.Register.Senders;
 using LibHouse.Infrastructure.Authentication.Register.SignIn;
 using LibHouse.Infrastructure.Authentication.Register.SignUp;
@@ -59,9 +61,13 @@ namespace LibHouse.API.Configurations.Authentication
 
             services.AddScoped<ISignUpConfirmationTokenSender, SignUpConfirmationTokenEmailSender>();
 
+            services.AddScoped<IPasswordResetTokenSender, PasswordResetTokenEmailSender>();
+
             services.AddScoped<IUserSignUp, IdentityUserSignUp>();
 
             services.AddScoped<IUserSignIn, IdentityUserSignIn>();
+
+            services.AddScoped<IUserPasswordReset, IdentityUserPasswordReset>();
 
             return services;
         }
