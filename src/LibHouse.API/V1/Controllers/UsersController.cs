@@ -129,6 +129,8 @@ namespace LibHouse.API.V1.Controllers
             {
                 NotifyError("Confirmação do cadastro do usuário", userConfirmed.Error);
 
+                Logger.Log(LogLevel.Error, $"Erro ao confirmar o cadastro do usuário: {userConfirmed.Error}");
+
                 return CustomResponseForPatchEndpoint(userConfirmed);
             }
 
@@ -139,6 +141,8 @@ namespace LibHouse.API.V1.Controllers
             if (userConfirmationAccepted.Failure)
             {
                 NotifyError("Aceitar confirmação do usuário", userConfirmationAccepted.Error);
+
+                Logger.Log(LogLevel.Error, $"Erro ao confirmar o cadastro do usuário: {userConfirmationAccepted.Error}");
 
                 return CustomResponseForPatchEndpoint(userConfirmationAccepted);
             }
