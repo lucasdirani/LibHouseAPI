@@ -294,5 +294,45 @@ namespace LibHouse.API.V1.Controllers
 
             return CustomResponseForPatchEndpoint(sendPasswordResetToken);
         }
+
+        /// <summary>
+        /// Confirma a redefinição de senha de um usuário.
+        /// </summary>
+        /// <param name="confirmUserPasswordReset">Objeto que possui os dados necessários para confirmar a redefinição de senha do usuário.</param>
+        /// <returns>Em caso de sucesso, retorna um objeto vazio. Em caso de erro, retorna uma lista de notificações.</returns>
+        /// <response code="204">A senha do usuário foi redefinida com sucesso.</response>
+        /// <response code="400">Os dados enviados são inválidos ou houve um erro na redefinição da senha.</response>
+        /// <response code="500">Erro ao processar a requisição no servidor.</response>
+        [AllowAnonymous]
+        [HttpPatch("confirm-password-reset", Name = "Confirm Password Reset")]
+        public async Task<ActionResult> ConfirmPasswordResetAsync(
+            [FromBody] ConfirmUserPasswordResetViewModel confirmUserPasswordReset)
+        {
+            if (ModelState.NotValid())
+            {
+                return CustomResponseFor(ModelState);
+            }
+
+            PasswordResetToken passwordResetToken = new(confirmUserPasswordReset.PasswordResetToken, isEncoded: false);
+
+            string userEmail = confirmUserPasswordReset.UserEmail;
+
+            string userNewPassword = confirmUserPasswordReset.Password;
+
+            Result userPasswordResetAccepted = await _userPasswordReset.AcceptUserPasswordResetTokenAsync(passwordResetToken, userEmail, userNewPassword);
+
+            if (userPasswordResetAccepted.Failure)
+            {
+                NotifyError("Aceitar redefinição de senha do usuário", userPasswordResetAccepted.Error);
+
+                Logger.Log(LogLevel.Error, $"Erro ao redefinir a senha do usuário: {userPasswordResetAccepted.Error}");
+
+                return CustomResponseForPatchEndpoint(userPasswordResetAccepted);
+            }
+
+            Logger.Log(LogLevel.Information, $"Senha redefinida para o usuário {userEmail}");
+
+            return CustomResponseForPatchEndpoint(userPasswordResetAccepted);
+        }
     }
 }

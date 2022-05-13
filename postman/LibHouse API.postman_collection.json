@@ -195,6 +195,36 @@
 						"description": "Endpoint para solicitar a redefinição de senha de um usuário com base no seu CPF."
 					},
 					"response": []
+				},
+				{
+					"name": "Confirm Password Reset",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"passwordResetToken\": \"CfDJ8BPykeuH+DRCpJAYVK0BLBRubwu+eZTwoW3PHMvNnz976g3Gr7kKvLuBxeDDgIoBjbf3nxzlilqKdEFgSJzzcSWfkAkcCp3d4ydIB37E6G9o5hsxXKs+KCBwdpctY7hWQyoJVtin5uSNoNGpbKQmZo6iK2ITkCB6PLibtD3E9NigX95ev9HNtQy54D0moXqXbdJRvKvMJy0bRagmzjKi4+wCjhuDnrdzH77P77tI6OYS\",\r\n    \"userEmail\": \"{{api_username}}\",\r\n    \"password\": \"{{api_user_password}}\",\r\n    \"confirmPassword\": \"{{api_user_password}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/{{api_version}}/users/confirm-password-reset",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"{{api_version}}",
+								"users",
+								"confirm-password-reset"
+							]
+						},
+						"description": "Endpoint que confirma a redefinição de senha de um usuário."
+					},
+					"response": []
 				}
 			],
 			"description": "Todas as requisições para a rota de usuários (/users) estão agrupadas nesta pasta. As principais operações incluem registrar, autenticar e consultar os dados de cadastro dos usuários da aplicação LibHouse."

@@ -40,7 +40,7 @@ namespace LibHouse.API.Senders.Tokens
         {
             return $"{user.Name}, se você solicitou a sua redefinição de senha na plataforma LibHouse, " +
                 $"clique neste link para concluir o processo: {requestPasswordResetAddress}/" +
-                $"{user.Email}/{user.Id}/{passwordResetToken.EncodedValue}";
+                $"{user.Email}/{user.Id}/{passwordResetToken.Value}";
         }
     }
 }

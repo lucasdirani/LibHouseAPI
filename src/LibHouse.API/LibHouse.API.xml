@@ -54,6 +54,41 @@
             <response code="400">Os dados enviados são inválidos ou houve uma falha na geração do token de redefinição de senha.</response>
             <response code="500">Erro ao processar a requisição no servidor.</response>
         </member>
+        <member name="M:LibHouse.API.V1.Controllers.UsersController.ConfirmPasswordResetAsync(LibHouse.API.V1.ViewModels.Users.ConfirmUserPasswordResetViewModel)">
+            <summary>
+            Confirma a redefinição de senha de um usuário.
+            </summary>
+            <param name="confirmUserPasswordReset">Objeto que possui os dados necessários para confirmar a redefinição de senha do usuário.</param>
+            <returns>Em caso de sucesso, retorna um objeto vazio. Em caso de erro, retorna uma lista de notificações.</returns>
+            <response code="204">A senha do usuário foi redefinida com sucesso.</response>
+            <response code="400">Os dados enviados são inválidos ou houve um erro na redefinição da senha.</response>
+            <response code="500">Erro ao processar a requisição no servidor.</response>
+        </member>
+        <member name="T:LibHouse.API.V1.ViewModels.Users.ConfirmUserPasswordResetViewModel">
+            <summary>
+            Objeto que possui os dados necessários para realizar a redefinição de senha de um usuário.
+            </summary>
+        </member>
+        <member name="P:LibHouse.API.V1.ViewModels.Users.ConfirmUserPasswordResetViewModel.PasswordResetToken">
+            <summary>
+            O token de redefinição de senha recebido no e-mail do usuário.
+            </summary>
+        </member>
+        <member name="P:LibHouse.API.V1.ViewModels.Users.ConfirmUserPasswordResetViewModel.UserEmail">
+            <summary>
+            O endereço de e-mail utilizado no registro do usuário.
+            </summary>
+        </member>
+        <member name="P:LibHouse.API.V1.ViewModels.Users.ConfirmUserPasswordResetViewModel.Password">
+            <summary>
+            A nova senha do usuário cadastrado. A senha deve ter pelo menos uma letra maiúscula, uma letra minúscula, um número e um caracter especial. Mínimo de dez, e máximo de trinta caracteres.
+            </summary>
+        </member>
+        <member name="P:LibHouse.API.V1.ViewModels.Users.ConfirmUserPasswordResetViewModel.ConfirmPassword">
+            <summary>
+            A confirmação da nova senha do usuário cadastrado.
+            </summary>
+        </member>
         <member name="T:LibHouse.API.V1.ViewModels.Users.ConfirmUserRegistrationViewModel">
             <summary>
             Objeto que possui os dados necessários para realizar a confirmação do registro de um usuário.
