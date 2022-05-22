@@ -225,6 +225,36 @@
 						"description": "Endpoint que confirma a redefinição de senha de um usuário."
 					},
 					"response": []
+				},
+				{
+					"name": "User Logout",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"{{api_username}}\",\r\n    \"refreshToken\": \"{{refresh_token}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/{{api_version}}/users/logout",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"{{api_version}}",
+								"users",
+								"logout"
+							]
+						},
+						"description": "Este endpoint realiza o logout de um usuário registrado com base no seu endereço de e-mail e valor de refresh token.\n\nEm caso de sucesso, um objeto vazio é retornado.\n\nEm caso de falha, uma lista de notificações detalhando os erros é retornada. Na maioria dos casos, isso significa que os parâmetros enviados para o endpoint estão em um formato incorreto."
+					},
+					"response": []
 				}
 			],
 			"description": "Todas as requisições para a rota de usuários (/users) estão agrupadas nesta pasta. As principais operações incluem registrar, autenticar e consultar os dados de cadastro dos usuários da aplicação LibHouse."

@@ -16,7 +16,7 @@ namespace LibHouse.Infrastructure.Authentication.Context.Configurations
 
             builder.Property(r => r.UserId).HasColumnType("nvarchar(450)").IsRequired();
 
-            builder.Property(r => r.JwtId).HasColumnType("varchar(max)").IsRequired();
+            builder.Property(r => r.JwtId).HasColumnType("varchar(100)").IsRequired();
 
             builder.Property(r => r.IsUsed).HasColumnType("bit").HasDefaultValueSql("0").IsRequired();
 
@@ -26,9 +26,13 @@ namespace LibHouse.Infrastructure.Authentication.Context.Configurations
 
             builder.Property(r => r.ExpiresIn).HasColumnType("datetime").IsRequired();
 
+            builder.Property(r => r.RevokedAt).HasColumnType("datetime");
+
             builder.HasOne(r => r.User);
 
             builder.HasIndex(r => r.Token).HasDatabaseName("idx_refresh_token").IsUnique();
+
+            builder.HasIndex(r => r.JwtId).HasDatabaseName("idx_jwt_id").IsUnique();
         }
     }
 }

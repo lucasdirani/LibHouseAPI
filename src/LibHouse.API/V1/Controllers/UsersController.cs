@@ -185,6 +185,49 @@ namespace LibHouse.API.V1.Controllers
         }
 
         /// <summary>
+        /// Realiza o logout de um usuário.
+        /// </summary>
+        /// <param name="logoutUser">Objeto que possui os dados necessários para realizar o logout do usuário.</param>
+        /// <returns>Em caso de sucesso, retorna um objeto vazio. Em caso de erro, retorna uma lista de notificações.</returns>
+        /// <response code="204">O logout do usuário foi confirmado com sucesso.</response>
+        /// <response code="400">Os dados enviados são inválidos ou houve uma falha na revogação do refresh token do usuário.</response>
+        /// <response code="403">O usuário não possui permissão para realizar o logout.</response>
+        /// <response code="500">Erro ao processar a requisição no servidor.</response>
+        [Authorize("User")]
+        [HttpPatch("logout", Name = "Logout")]
+        public async Task<ActionResult> LogoutUserAsync(LogoutUserViewModel logoutUser)
+        {
+            if (ModelState.NotValid())
+            {
+                return CustomResponseFor(ModelState);
+            }
+
+            if (LoggedUser.GetUserEmail() != logoutUser.Email)
+            {
+                Logger.Log(LogLevel.Warning, $"Operação negada de logout: {LoggedUser.GetUserEmail()}");
+
+                return Forbid();
+            }
+
+            RefreshToken refreshToken = await _refreshTokenService.GetRefreshTokenByValueAsync(logoutUser.RefreshToken);
+
+            Result refreshTokenMarkedAsRevoked = await _refreshTokenService.MarkRefreshTokenAsRevokedAsync(refreshToken);
+
+            if (refreshTokenMarkedAsRevoked.Failure)
+            {
+                NotifyError("Revogar refresh token", refreshTokenMarkedAsRevoked.Error);
+
+                Logger.Log(LogLevel.Error, refreshTokenMarkedAsRevoked.Error);
+
+                return CustomResponseForPatchEndpoint(refreshTokenMarkedAsRevoked);
+            }
+
+            Logger.Log(LogLevel.Information, $"Logout realizado para o usuário {logoutUser.Email}");
+
+            return CustomResponseForPatchEndpoint(refreshTokenMarkedAsRevoked);
+        }
+
+        /// <summary>
         /// Renova um access token expirado a partir de um refresh token.
         /// </summary>
         /// <param name="userRefreshToken">Objeto que possui os dados necessários para renovar o access token.</param>
@@ -226,7 +269,16 @@ namespace LibHouse.API.V1.Controllers
                 return CustomResponseForPostEndpoint();
             }
 
-            await _refreshTokenService.MarkRefreshTokenAsUsedAsync(refreshToken);
+            Result refreshTokenMarkedAsUsed = await _refreshTokenService.MarkRefreshTokenAsUsedAsync(refreshToken);
+
+            if (refreshTokenMarkedAsUsed.Failure)
+            {
+                Logger.Log(LogLevel.Error, refreshTokenMarkedAsUsed.Error);
+
+                NotifyError("Atualizar Refresh Token", refreshTokenMarkedAsUsed.Error);
+
+                return CustomResponseForPostEndpoint();
+            }
 
             Logger.Log(LogLevel.Information, $"Usuário {userEmail} renovou o seu login com sucesso: {DateTime.UtcNow}");
 

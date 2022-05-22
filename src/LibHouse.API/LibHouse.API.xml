@@ -34,6 +34,17 @@
             <response code="400">Os dados enviados são inválidos ou houve uma falha na autenticação do usuário.</response>
             <response code="500">Erro ao processar a requisição no servidor.</response>
         </member>
+        <member name="M:LibHouse.API.V1.Controllers.UsersController.LogoutUserAsync(LibHouse.API.V1.ViewModels.Users.LogoutUserViewModel)">
+            <summary>
+            Realiza o logout de um usuário.
+            </summary>
+            <param name="logoutUser">Objeto que possui os dados necessários para realizar o logout do usuário.</param>
+            <returns>Em caso de sucesso, retorna um objeto vazio. Em caso de erro, retorna uma lista de notificações.</returns>
+            <response code="204">O logout do usuário foi confirmado com sucesso.</response>
+            <response code="400">Os dados enviados são inválidos ou houve uma falha na revogação do refresh token do usuário.</response>
+            <response code="403">O usuário não possui permissão para realizar o logout.</response>
+            <response code="500">Erro ao processar a requisição no servidor.</response>
+        </member>
         <member name="M:LibHouse.API.V1.Controllers.UsersController.RefreshTokenAsync(LibHouse.API.V1.ViewModels.Users.UserRefreshTokenViewModel)">
             <summary>
             Renova um access token expirado a partir de um refresh token.
@@ -122,6 +133,21 @@
         <member name="P:LibHouse.API.V1.ViewModels.Users.LoginUserViewModel.Password">
             <summary>
             A senha do usuário cadastrado. 
+            </summary>
+        </member>
+        <member name="T:LibHouse.API.V1.ViewModels.Users.LogoutUserViewModel">
+            <summary>
+            Objeto que possui os dados necessários para realizar o logout do usuário
+            </summary>
+        </member>
+        <member name="P:LibHouse.API.V1.ViewModels.Users.LogoutUserViewModel.Email">
+            <summary>
+            O endereço de e-mail do usuário que está fazendo o logout
+            </summary>
+        </member>
+        <member name="P:LibHouse.API.V1.ViewModels.Users.LogoutUserViewModel.RefreshToken">
+            <summary>
+            O refresh token que será revogado
             </summary>
         </member>
         <member name="T:LibHouse.API.V1.ViewModels.Users.RegisterUserViewModel">

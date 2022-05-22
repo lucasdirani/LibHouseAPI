@@ -10,8 +10,9 @@ namespace LibHouse.Infrastructure.Authentication.Token.Models
         public string Token { get; }
         public string JwtId { get; }
         public bool IsUsed { get; private set; }
-        public bool IsRevoked { get; }
+        public bool IsRevoked { get; private set; }
         public DateTime CreatedAt { get; }
+        public DateTime? RevokedAt { get; private set; }
         public DateTime ExpiresIn { get; }
         public IdentityUser User { get; }
 
@@ -22,8 +23,9 @@ namespace LibHouse.Infrastructure.Authentication.Token.Models
             DateTime expiresIn,
             IdentityUser user,
             bool isUsed = false,
-            bool isRevoked = false)
-            : this(user.Id, token, jwtId, isUsed, isRevoked, createdAt, expiresIn)
+            bool isRevoked = false,
+            DateTime? revokedAt = null)
+            : this(user.Id, token, jwtId, isUsed, isRevoked, createdAt, expiresIn, revokedAt)
         {
             Id = Guid.NewGuid();
             User = user;
@@ -36,7 +38,8 @@ namespace LibHouse.Infrastructure.Authentication.Token.Models
             bool isUsed, 
             bool isRevoked,
             DateTime createdAt,
-            DateTime expiresIn)
+            DateTime expiresIn,
+            DateTime? revokedAt)
         {
             UserId = userId;
             Token = token;
@@ -45,11 +48,21 @@ namespace LibHouse.Infrastructure.Authentication.Token.Models
             IsRevoked = isRevoked;
             CreatedAt = createdAt;
             ExpiresIn = expiresIn;
+            RevokedAt = revokedAt;
         }
 
         public void MarkAsUsed()
         {
             IsUsed = true;
+        }
+
+        public void MarkAsRevoked()
+        {
+            if (!IsRevoked)
+            {
+                IsRevoked = true;
+                RevokedAt = DateTime.UtcNow;
+            }
         }
 
         public override string ToString()
