@@ -19,6 +19,8 @@ namespace LibHouse.Data.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(LibHouseContext).Assembly);
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }
