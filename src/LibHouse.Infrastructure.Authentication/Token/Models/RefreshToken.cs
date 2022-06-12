@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System;
+﻿using System;
 
 namespace LibHouse.Infrastructure.Authentication.Token.Models
 {
@@ -14,33 +13,18 @@ namespace LibHouse.Infrastructure.Authentication.Token.Models
         public DateTime CreatedAt { get; }
         public DateTime? RevokedAt { get; private set; }
         public DateTime ExpiresIn { get; }
-        public IdentityUser User { get; }
 
         public RefreshToken(
             string token, 
             string jwtId, 
+            string userId,
             DateTime createdAt, 
             DateTime expiresIn,
-            IdentityUser user,
             bool isUsed = false,
             bool isRevoked = false,
             DateTime? revokedAt = null)
-            : this(user.Id, token, jwtId, isUsed, isRevoked, createdAt, expiresIn, revokedAt)
         {
             Id = Guid.NewGuid();
-            User = user;
-        }
-
-        private RefreshToken(
-            string userId, 
-            string token, 
-            string jwtId, 
-            bool isUsed, 
-            bool isRevoked,
-            DateTime createdAt,
-            DateTime expiresIn,
-            DateTime? revokedAt)
-        {
             UserId = userId;
             Token = token;
             JwtId = jwtId;

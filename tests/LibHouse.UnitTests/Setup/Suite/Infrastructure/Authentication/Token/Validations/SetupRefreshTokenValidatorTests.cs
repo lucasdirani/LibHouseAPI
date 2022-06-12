@@ -53,7 +53,7 @@ namespace LibHouse.UnitTests.Setup.Suite.Infrastructure.Authentication.Token.Val
                 isRevoked: isRevoked, 
                 createdAt: createdAt ?? DateTime.UtcNow,
                 expiresIn: expiresIn ?? DateTime.UtcNow.AddDays(3), 
-                user: userWhoOwnsTheToken
+                userId: userWhoOwnsTheToken.Id
             );
         }
 

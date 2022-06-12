@@ -40,7 +40,7 @@ namespace LibHouse.Infrastructure.Authentication.Token.Generators.RefreshTokens
 
             DateTime tokenExpiresIn = DateTime.UtcNow.AddMonths(_refreshTokenSettings.ExpiresInMonths);
 
-            RefreshToken refreshToken = new(tokenValue, accessTokenId, tokenCreatedAt, tokenExpiresIn, user);
+            RefreshToken refreshToken = new(tokenValue, accessTokenId, user.Id, tokenCreatedAt, tokenExpiresIn);
 
             await _authenticationContext.RefreshTokens.AddAsync(refreshToken);
 

@@ -1,4 +1,5 @@
 ﻿using LibHouse.Infrastructure.Authentication.Token.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -28,7 +29,7 @@ namespace LibHouse.Infrastructure.Authentication.Context.Configurations
 
             builder.Property(r => r.RevokedAt).HasColumnType("datetime");
 
-            builder.HasOne(r => r.User);
+            builder.HasOne<IdentityUser>().WithMany().HasForeignKey(r => r.UserId);
 
             builder.HasIndex(r => r.Token).HasDatabaseName("idx_refresh_token").IsUnique();
 
